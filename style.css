@@ -1,0 +1,204 @@
+/* Genel Stil */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+main {
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1000px;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add Farmer Bölümü */
+#add-farmer {
+    text-align: left;
+}
+
+#add-farmer h2 {
+    margin-bottom: 1rem;
+    color: #4CAF50;
+    text-align: center;
+}
+
+#add-farmer form {
+    width: 100%;
+}
+
+#add-farmer label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+#add-farmer input {
+    width: 100%; /* Genişliği %100 yapar */
+    margin-bottom: 1rem;
+    padding: 0.75rem; /* İç boşluk */
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#add-farmer input:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+#add-farmer button {
+    display: block;
+    width: 100%; /* Genişliği tam genişlik yapar */
+    padding: 0.75rem;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#add-farmer button:hover {
+    background-color: #45a049;
+}
+
+/* List Farmers Bölümü */
+#list-farmers {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+#list-farmers h2 {
+    margin-bottom: 1rem;
+    color: #4CAF50;
+    text-align: center;
+}
+
+#list-farmers-btn {
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 1rem;
+    display: block;
+    width: 100%; /* Genişliği tam genişlik yapar */
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#list-farmers-btn:hover {
+    background-color: #45a049;
+}
+
+/* Tablo Stilleri */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: white;
+}
+
+table th, table td {
+    text-align: center;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    cursor: default;      /* Fare imlecini varsayılan hale getir */
+    user-select: none;    /* Yazıyı seçmeyi devre dışı bırak */
+    outline: none;        /* Odaklanma kenarlığını kaldır */
+}
+
+table td input {
+    width: 90%; /* Hücre genişliğine göre uyumlu olacak şekilde ayarla */
+    max-width: 95%;
+    box-sizing: border-box; /* Padding ve border genişliği dahil */
+    padding: 5px; /* İç boşluk ekle */
+    font-size: 1rem; /* Yazı boyutunu tabloyla eşleştir */
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Edit ve Delete Butonları */
+button.edit-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.edit-btn:hover {
+    background-color: #1e88e5;
+}
+
+button.delete-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.delete-btn:hover {
+    background-color: #e53935;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 600px) {
+    main {
+        padding: 1rem;
+    }
+
+    table, table th, table td {
+        font-size: 0.9rem;
+    }
+
+    form {
+        gap: 0.5rem;
+    }
+
+    form button {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+}
