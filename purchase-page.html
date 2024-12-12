@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Page</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="purchase.js" defer></script>
+</head>
+<body class="purchase-page">
+    <header>
+        <h1>Purchase Page</h1>
+    </header>
+
+    <main>
+
+        <section id="list-products">
+            <h2>List Products</h2>
+            <button type="button" id="list-products-btn">Show Products</button>
+            <table id ="products-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Total Weight</th>
+                        <th>Average Price</th>
+                        <th>Total Seller</th>
+                        <th>Minimun Price</th>
+                        <th>Kg of Minimum Price</th>
+                        <th>Farmer of Minimum Price</th>
+                    </tr>
+                </thead>
+                <tbody id="products-table-body">
+                    <!-- Farmers will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="search-product">
+            <h2>Search Products</h2>
+            <form id="search-product-form">
+                <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                    <!-- Search Type Dropdown -->
+                    <select 
+                        id="search-type" 
+                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                    >
+                        <option value="farmer-name">Farmer Name</option>
+                        <option value="product-name">Product Name</option>
+                    </select>
+                    <!-- Search Value Dropdown -->
+                    <select 
+                        id="search-value" 
+                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                    >
+                        <option value="" disabled selected>Select Name</option>
+                        
+                    </select>
+                    <!-- Search Button -->
+                    <button 
+                        type="button" 
+                        id="search-product-btn" 
+                        style="padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                    >
+                        Search
+                    </button>
+                </div>
+            </form>
+        
+            <!-- Sonuçları göstermek için tablo -->
+            <table id="search-results-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; display: none;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Product Name</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Weight</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Price Of 1 Kg</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Total Price</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Farmer Name</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Select</th>
+                    </tr>
+                </thead>
+                <tbody id="search-results-body">
+                    <!-- Dinamik olarak JS ile doldurulacak -->
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+</body>
+</html>

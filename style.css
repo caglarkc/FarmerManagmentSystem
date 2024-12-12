@@ -29,6 +29,147 @@ main {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Navigation Bar Stil */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background-color: #45a049;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #0d0733;
+}
+
+/* Select button */
+button.select-btn {
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+button.select-btn:hover {
+    background-color: #45a049;
+}
+
+button.unselect-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+button.unselect-btn:hover {
+    background-color: #e53935;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.welcome-section h2 {
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.welcome-section p {
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Feature Cards Section */
+.feature-section {
+    margin-top: 2rem;
+}
+
+.feature-section h2 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 2rem;
+}
+
+.feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.card p {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.card a.btn {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: #4CAF50;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.card a.btn:hover {
+    background-color: #3e8e41;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 2rem;
+    border-top: 1px solid #ddd;
+}
+
 /* Add Farmer Bölümü */
 #add-farmer {
     text-align: left;
@@ -84,18 +225,18 @@ main {
 }
 
 /* List Farmers Bölümü */
-#list-farmers {
+#list-farmers, #list-products {
     margin-top: 2rem;
     text-align: left;
 }
 
-#list-farmers h2 {
+#list-farmers h2, #list-products h2{
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
 }
 
-#list-farmers-btn {
+#list-farmers-btn, #list-products-btn {
     background-color: #4CAF50;
     color: white;
     margin-top: 1rem;
@@ -110,7 +251,7 @@ main {
     transition: background-color 0.3s ease;
 }
 
-#list-farmers-btn:hover {
+#list-farmers-btn:hover, #list-products-btn:hover{
     background-color: #45a049;
 }
 
@@ -201,4 +342,70 @@ button.delete-btn:hover {
         padding: 0.5rem;
         font-size: 0.9rem;
     }
+}
+
+/* Purchase Sayfası */
+#list-products {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+#list-products h2 {
+    margin-bottom: 1rem;
+    color: #4CAF50;
+    text-align: center;
+}
+
+#show-products-btn {
+    background-color: #4CAF50;
+    color: white;
+    display: block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#show-products-btn:hover {
+    background-color: #45a049;
+}
+
+/* Dropdown */
+#product-name-dropdown {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 1rem;
+}
+
+/* Tablo Stilleri */
+#products-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: white;
+    display: none; /* İlk başta görünmez */
+}
+
+#products-table th, #products-table td {
+    text-align: center;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+}
+
+#products-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#products-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#products-table tbody tr:hover {
+    background-color: #f1f1f1;
 }

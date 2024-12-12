@@ -46,7 +46,7 @@ function addFarmer(name, location, email, phone){
                 productIds
             };
           clearAddFarmer();
-          setInvisibleTable();
+          setInvisibleFarmerTable();
           addDropdowns();
           alert(`Farmer "${name}" added successfully!`);
         }
@@ -162,18 +162,9 @@ function isFarmerInfoExist(name,email,phone) {
     return false;
 }
 
-//AŞAGIYI DUZENLE, EDİTLEME DOGRU GİBİ AMA SİLME VE O ARLAARDAKİ GEÇİŞ ÇOK KARMAŞIK VE YNALIŞ GİBİ
 
 function editBtnFarmer(row,farmer) {
     const cells = row.querySelectorAll('td');
-
-    // Orijinal hücre değerlerini sakla
-    const originalValues = {
-        name: farmer.name,
-        location: farmer.location,
-        email: farmer.email,
-        phone: farmer.phone
-    };
 
     // Hücreleri input alanlarına dönüştür
     cells[0].innerHTML = `<input type="text" value="${farmer.name}">`;
@@ -190,7 +181,7 @@ function editBtnFarmer(row,farmer) {
     // Cancel düğmesine tıklama olayını dinle
     const cancelBtn = cells[5].querySelector('.cancel-btn');
     cancelBtn.addEventListener('click', () => {
-        cancelUpdateFarmer(row, originalValues);
+        cancelUpdateFarmer(row, farmer);
     });
 
     // Save düğmesine tıklama olayını dinle
@@ -200,14 +191,14 @@ function editBtnFarmer(row,farmer) {
     });
 
 }
-function cancelUpdateFarmer(row, originalValues) {
+function cancelUpdateFarmer(row, farmer) {
     const cells = row.querySelectorAll('td');
 
     // Hücrelere orijinal değerlerini geri yükle
-    cells[0].innerHTML = originalValues.name;
-    cells[1].innerHTML = originalValues.location;
-    cells[2].innerHTML = originalValues.email;
-    cells[3].innerHTML = originalValues.phone;
+    cells[0].innerHTML = farmer.name;
+    cells[1].innerHTML = farmer.location;
+    cells[2].innerHTML = farmer.email;
+    cells[3].innerHTML = farmer.phone;
 
     // Düzenleme butonlarını geri yükle
     cells[5].innerHTML = `
@@ -218,12 +209,12 @@ function cancelUpdateFarmer(row, originalValues) {
     // Yeni düzenleme ve silme olaylarını ekle
     const editBtn = cells[5].querySelector('.edit-btn');
     editBtn.addEventListener('click', () => {
-        editBtnFarmer(row, originalValues);
+        editBtnFarmer(row, farmer);
     });
 
     const deleteBtn = cells[5].querySelector('.delete-btn');
     deleteBtn.addEventListener('click', () => {
-        deleteBtnFarmer(originalValues);
+        deleteBtnFarmer(farmer);
     });
 }
 function saveUpdateFarmer(row, farmer) {
@@ -301,18 +292,17 @@ function deleteBtnFarmer(farmer) {
     if(farmers[farmer.farmerId]) {
         delete farmers[farmer.farmerId];
         saveFarmersToLocalStorage();
+        addDropdowns();
         clearAddFarmer();
         const addFarmerBtn = document.querySelector('#add-farmer-btn');
         addFarmerBtn.textContent = 'Add Farmer';
         console.log(`Farmer with ID "${farmer.farmerId}" has been deleted.`);
-        setInvisibleTable();
+        setInvisibleFarmerTable();
     }else {
         console.log(`Farmer with ID "${farmer.farmerId}" does not exist.`);
     }
     
 }
-
-
 
 
 function searchFarmer() {
@@ -336,17 +326,32 @@ function searchFarmer() {
     } else if (searchType === 'phone') {
         type = 'phone';
     } else if (searchType === 'product') {
-        type = 'productIds';
+        type = 'productName';
     }
-    for (const farmerId in farmers) {
-        const farmer = farmers[farmerId];
-        if(farmer[type] == searchVal) {
-            isSearching = true;
-            showSearchResults();
-            addRowToSearchTable(farmer);
+    if(type == 'productName') {
+        for (const farmerId in farmers) {
+            const farmer = farmers[farmerId];
+            const productIds = farmer.productIds;
+            for (const productId of productIds) {
+                const productName = products[productId].productName;
+                if(productName == searchVal) {
+                    isSearching = true;
+                    showSearchResults();
+                    addRowToSearchTable(farmer);
+                }
+            }
+        }
+    }else {
+        for (const farmerId in farmers) {
+            const farmer = farmers[farmerId];
+            if(farmer[type] == searchVal) {
+                isSearching = true;
+                showSearchResults();
+                addRowToSearchTable(farmer);
+            }
         }
     }
-
+    
     if(!isSearching) {
         alert('Dont found...');
     }
@@ -375,7 +380,7 @@ function addRowToSearchTable(farmer) {
         <td style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">${farmer.location}</td>
         <td style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">${farmer.email}</td>
         <td style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">${farmer.phone}</td>
-        <td style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">${farmer.productIds.join(', ')}</td>
+        <td style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">${getProductNames(farmer.productIds)}</td>
     `;
 
     // Satırı tabloya ekle
@@ -455,29 +460,35 @@ addProductBtn.addEventListener('click' , () => {
 })
 function addProduct(farmerId,productName,weight,price) {
     let productId = isProductExist(productName,farmerId);
+    
     if(productId != null) {
         const w = products[productId]?.weight;
         const p = products[productId]?.price;
         const totalW = Number(w) + Number(weight);
         const averagePrice = ((weight * price) + (w * p)) / (totalW);
-        
+        const totalPrice = totalW * averagePrice;
+
         products[productId].weight = totalW;
         products[productId].price = averagePrice;
+        products[productId].totalPrice = totalPrice;
     }else{
+        const totalPrice = weight * price;
         productId = `product_${Date.now()}`;
         products[productId] = {
             productId,
             farmerId,
             productName,
             weight,
-            price
+            price,
+            totalPrice
         };
         farmers[farmerId].productIds.push(productId);
     }
     saveFarmersToLocalStorage();
     saveProductsToLocalStorage();
     clearAddProduct();
-    setInvisibleTable();
+    setInvisibleFarmerTable();
+    setInvisibleProductTable();
     alert(`Product "${productName}" added successfully!`);
 }
 function isProductExist(productName,farmerId) {
@@ -518,12 +529,11 @@ function getProductNames(productIds) {
 function showProductsListOnTable(product) {
     const tableBody = document.querySelector('#products-table-body');
     const row = document.createElement('tr');
-    const totalPrice = product.weight * product.price;
     row.innerHTML = `
         <td>${product.productName}</td>
         <td>${product.weight}</td>
         <td>${product.price}</td>
-        <td>${totalPrice}</td>
+        <td>${product.totalPrice}</td>
         <td>
             <button class="edit-btn">Edit</button>
             <button class="delete-btn">Delete</button>
@@ -537,11 +547,11 @@ function showProductsListOnTable(product) {
 
     editBtn.addEventListener('click', () => {
         isUpdatingProduct = true;
-        //editBtnProduct(row,product);
+        editBtnProduct(row,product);
     });
 
     deleteBtn.addEventListener('click', () => {
-        //deleteBtnProduct(product);
+        deleteBtnProduct(product);
     });
 }
 function setInvisibleProductTable() {
@@ -571,3 +581,129 @@ showProductsBtn.addEventListener('click', () => {
 document.getElementById('farmer-product-dropdown').addEventListener('change', () => {
     setInvisibleProductTable();
 })
+function editBtnProduct(row,product) {
+    const cells = row.querySelectorAll('td');
+
+    // Hücreleri input alanlarına dönüştür
+    cells[0].innerHTML = `<input type="text" value="${product.productName}">`;
+    cells[1].innerHTML = `<input type="number" value="${product.weight}">`;
+    cells[2].innerHTML = `<input type="number" value="${product.price}">`;
+
+    // Cancel ve Save düğmeleri ekle
+    cells[4].innerHTML = `
+        <button class="save-btn">Save</button>
+        <button class="cancel-btn">Cancel</button>
+    `;
+
+    // Cancel düğmesine tıklama olayını dinle
+    const cancelBtn = cells[4].querySelector('.cancel-btn');
+    cancelBtn.addEventListener('click', () => {
+        cancelUpdateProduct(row, product);
+    });
+
+    // Save düğmesine tıklama olayını dinle
+    const saveBtn = cells[4].querySelector('.save-btn');
+    saveBtn.addEventListener('click', () => {
+        saveUpdateProduct(row, product);
+    });
+}
+function cancelUpdateProduct(row, product) {
+    const cells = row.querySelectorAll('td');
+
+    // Hücrelere orijinal değerlerini geri yükle
+    cells[0].innerHTML = product.productName;
+    cells[1].innerHTML = product.weight;
+    cells[2].innerHTML = product.price;
+    cells[3].innerHTML = product.totalPrice;
+
+    // Düzenleme butonlarını geri yükle
+    cells[4].innerHTML = `
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+    `;
+
+    // Yeni düzenleme ve silme olaylarını ekle
+    const editBtn = cells[4].querySelector('.edit-btn');
+    editBtn.addEventListener('click', () => {
+        editBtnProduct(row, product);
+    });
+
+    const deleteBtn = cells[4].querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+        deleteBtnProduct(product);
+    });
+}
+function saveUpdateProduct(row, product) {
+    const cells = row.querySelectorAll('td');
+
+    // Input değerlerini al
+    const productName = cells[0].querySelector('input').value;
+    const weight = cells[1].querySelector('input').value;
+    const price = cells[2].querySelector('input').value;
+    let totalPrice = product.totalPrice;
+    const productId = product.productId;
+    const farmerId = product.farmerId;
+
+    if(product.productName == productName && product.weight == weight && product.price == price) {
+        alert('All infos are same...');
+        cancelUpdateProduct(row,product);
+
+    }else {
+        if(isValidText(productName) && isValidNumber(weight) && isValidNumber(price)) {
+            delete products[products.productId];
+            totalPrice = weight * price;
+            products[productId] = {
+                productId,
+                farmerId,
+                productName,
+                weight,
+                price,
+                totalPrice
+            };
+            clearAddProduct();
+            setInvisibleProductTable();
+            saveFarmersToLocalStorage();
+            saveProductsToLocalStorage();
+            alert(`Product "${productName}" updated successfully!`);
+        }else if (!isValidText(name)){
+            alert('Lütfen geçerli bir isim giriniz!');
+        }else if(!isValidText(location)){
+            alert('Lütfen geçerli bir şehir bilgisi giriniz!');
+        }else if(!isValidEmail(email)){
+            alert('Lütfen geçerli bir e-posta adresi giriniz!');
+        }else if(!isValidPhoneNumber(phone)){
+            alert('Lütfen geçerli bir telefon numarası giriniz! (başına 0 koymadan)');
+        }
+        // Güncellenen değerleri tabloya geri yükle
+        cancelUpdateProduct(row, product);
+    }
+
+    
+}
+function deleteBtnProduct(product) {
+    if(products[product.productId]) {
+        delete products[product.productId];
+        // Farmers içinde ilgili ürün ID'sini sil
+        for (const farmerId in farmers) {
+            const farmer = farmers[farmerId];
+            // farmer.productIds dizisinde productId'yi bul ve sil
+            const index = farmer.productIds.indexOf(product.productId);
+            if (index !== -1) {
+                farmer.productIds.splice(index, 1); // Diziden ID'yi kaldır
+                break; // Daha fazla aramaya gerek yok, işlemi bitir
+            }
+        }
+        saveFarmersToLocalStorage();
+        saveProductsToLocalStorage();
+        addDropdowns();
+        clearAddProduct();
+        const addProductBtn = document.querySelector('#add-product-btn');
+        addProductBtn.textContent = 'Add Product';
+        console.log(`Product with ID "${product.productId}" has been deleted.`);
+        setInvisibleProductTable();
+    }else {
+        console.log(`Product with ID "${product.productId}" does not exist.`);
+    }
+
+}
+
