@@ -9,190 +9,216 @@
 </head>
 <body class="farmer-page">
     <header>
-        <h1>Farmer Management</h1>
+        <h1>Farmer Managment Page</h1>
+        <nav>
+            <ul>
+                <li><a href="home-page.html">Ana Sayfa</a></li>
+                <li><a href="farmer-page.html">Farmer Page</a></li>
+                <li><a href="purchase-page.html">Purchase Page</a></li>
+                <li><a href="sale-page.html">Sale Page</a></li>
+                <li><a href="buy-page.html">Buy Page</a></li>
+                <li><a href="inventory-page.html">Inventory Page</a></li>
+                <li><a href="report-page.html">Report Page</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
-        <section id="add-farmer">
-            <h2>Add Farmer</h2>
-            <form id="farmer-form">
-                <label for="name">Name & Surname:</label>
-                <input type="text" id="name" placeholder="John Doe" required>
-                <label for="location">Location (City):</label>
-                <input type="text" id="location" placeholder="City Name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" placeholder="example@mail.com" required>
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" placeholder="5551112233" pattern="[0-9]{10}" required>
-                <button type="button" id="add-farmer-btn">Add Farmer</button>
-            </form>
-        </section>
+        <div id="add-farmer-container" class="section-container">
+            <section id="add-farmer">
+                <h2>Add Farmer</h2>
+                <form id="farmer-form">
+                    <label for="name">Name & Surname:</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                    <label for="location">Location (City):</label>
+                    <input type="text" id="location" placeholder="City Name" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="example@mail.com" required>
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" placeholder="5551112233" pattern="[0-9]{10}" required>
+                    <button type="button" id="add-farmer-btn">Add Farmer</button>
+                </form>
+            </section>
+        </div>
+        
 
-        <section id="list-farmers">
-            <h2>List Farmers</h2>
-            <button type="button" id="list-farmers-btn">Show Farmers</button>
-            <table id ="farmers-table">
-                <thead>
-                    <tr>
-                        <th>Name & Surname</th>
-                        <th>Location</th>
-                        <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>Products</th>
-                    </tr>
-                </thead>
-                <tbody id="farmers-table-body">
-                    <!-- Farmers will be dynamically added here -->
-                </tbody>
-            </table>
-        </section>
+        <div id="list-farmers-container" class="section-container">
+            <section id="list-farmers">
+                <h2>List Farmers</h2>
+                <button type="button" id="list-farmers-btn">Show Farmers</button>
+                <table id ="farmers-table">
+                    <thead>
+                        <tr>
+                            <th>Name & Surname</th>
+                            <th>Location</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Products</th>
+                        </tr>
+                    </thead>
+                    <tbody id="farmers-table-body">
+                        <!-- Farmers will be dynamically added here -->
+                    </tbody>
+                </table>
+            </section> 
+        </div>
+        
 
-        <section id="search-farmer">
-            <h2>Search Farmers</h2>
-            <form id="search-farmer-form">
-                <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
-                    <!-- Search Input -->
+        <div id="search-farmer-container" class="section-container">
+            <section id="search-farmer">
+                <h2>Search Farmers</h2>
+                <form id="search-farmer-form">
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                        <!-- Search Input -->
+                        <input 
+                            type="text" 
+                            id="search-farmer-input" 
+                            placeholder="Search..." 
+                            style="flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                        >
+                        <!-- Search Type Dropdown -->
+                        <select 
+                            id="search-type" 
+                            style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                        >
+                            <option value="name">Name</option>
+                            <option value="location">Location</option>
+                            <option value="email">Email</option>
+                            <option value="phone">Phone Number</option>
+                            <option value="product">Product</option>
+                        </select>
+                        <!-- Search Button -->
+                        <button 
+                            type="button" 
+                            id="search-farmer-btn" 
+                            style="padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                        >
+                            Search
+                        </button>
+                    </div>
+                </form>
+            
+                <!-- Sonuçları göstermek için tablo -->
+                <table id="search-results-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; display: none;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Name & Surname</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Location</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Email</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Phone Number</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Products</th>
+                        </tr>
+                    </thead>
+                    <tbody id="search-results-body">
+                        <!-- Dinamik olarak JS ile doldurulacak -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+        
+        
+        <div id="add-product-container" class="section-container">
+            <section id="add-product">
+                <h2>Add Product</h2>
+                <form id="product-form">
+                    <!-- Farmer Selection Dropdown -->
+                    <label for="farmer-names">Choose Farmer:</label>
+                    <select 
+                        id="farmer-names" 
+                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;"
+                        required
+                    >
+                        <option value="" disabled selected>Select a farmer</option>
+                        <!-- Farmer names will be dynamically added here -->
+                    </select>
+            
+                    <!-- Product Name -->
+                    <label for="product-name">Product Name:</label>
                     <input 
                         type="text" 
-                        id="search-farmer-input" 
-                        placeholder="Search..." 
-                        style="flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                        id="product-name" 
+                        placeholder="Enter product name (e.g., Blueberry)" 
+                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;" 
+                        required
                     >
-                    <!-- Search Type Dropdown -->
-                    <select 
-                        id="search-type" 
-                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+            
+                    <!-- Total Product Weight -->
+                    <label for="weight">Total Product Weight (Kg):</label>
+                    <input 
+                        type="number" 
+                        id="weight" 
+                        placeholder="Enter weight in kg" 
+                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;" 
+                        required
                     >
-                        <option value="name">Name</option>
-                        <option value="location">Location</option>
-                        <option value="email">Email</option>
-                        <option value="phone">Phone Number</option>
-                        <option value="product">Product</option>
-                    </select>
-                    <!-- Search Button -->
+            
+                    <!-- Price of 1Kg -->
+                    <label for="price">Price of 1Kg:</label>
+                    <input 
+                        type="number" 
+                        id="price" 
+                        placeholder="Enter price per kg" 
+                        style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;" 
+                        required
+                    >
+    
+                    <!-- Total Price Display -->
+                    <div id="total-price-container" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold; color: #4CAF50;">
+                        Total Price: 0
+                    </div>
+            
+                    <!-- Add Product Button -->
                     <button 
                         type="button" 
-                        id="search-farmer-btn" 
+                        id="add-product-btn" 
+                        style="padding: 0.75rem; font-size: 1rem; border: none; border-radius: 4px; background-color: #4CAF50; color: white; cursor: pointer; width: 100%;"
+                    >
+                        Add Product
+                    </button>
+                </form>
+            </section>
+        </div>
+        
+        
+        <div id="list-products-container" class="section-container">
+            <section id="list-products">
+                <h2>List Products</h2>
+                <!-- Dropdown ve Button -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <!-- Show Products Button -->
+                    <button 
+                        type="button" 
+                        id="show-products-btn" 
                         style="padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
                     >
-                        Search
+                        Show Products
                     </button>
+                    <!-- Farmer Selection Dropdown -->
+                    <select 
+                        id="farmer-product-dropdown" 
+                        style="flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                    >
+                        <option value="" disabled selected>Select a farmer</option>
+                        <!-- Farmers will be dynamically added -->
+                    </select>
                 </div>
-            </form>
+            
+                <!-- Products Table -->
+                <table id="products-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; display: none;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Product Name</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Weight (Kg)</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Price per Kg (₺)</th>
+                            <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Total Price (₺)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <!-- Products will be dynamically added here -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
         
-            <!-- Sonuçları göstermek için tablo -->
-            <table id="search-results-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; display: none;">
-                <thead>
-                    <tr>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Name & Surname</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Location</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Email</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Phone Number</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Products</th>
-                    </tr>
-                </thead>
-                <tbody id="search-results-body">
-                    <!-- Dinamik olarak JS ile doldurulacak -->
-                </tbody>
-            </table>
-        </section>
-        
-        <section id="add-product">
-            <h2>Add Product</h2>
-            <form id="product-form">
-                <!-- Farmer Selection Dropdown -->
-                <label for="farmer-names">Choose Farmer:</label>
-                <select 
-                    id="farmer-names" 
-                    style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;"
-                    required
-                >
-                    <option value="" disabled selected>Select a farmer</option>
-                    <!-- Farmer names will be dynamically added here -->
-                </select>
-        
-                <!-- Product Name -->
-                <label for="product-name">Product Name:</label>
-                <input 
-                    type="text" 
-                    id="product-name" 
-                    placeholder="Enter product name (e.g., Blueberry)" 
-                    style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;" 
-                    required
-                >
-        
-                <!-- Total Product Weight -->
-                <label for="weight">Total Product Weight (Kg):</label>
-                <input 
-                    type="number" 
-                    id="weight" 
-                    placeholder="Enter weight in kg" 
-                    style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;" 
-                    required
-                >
-        
-                <!-- Price of 1Kg -->
-                <label for="price">Price of 1Kg:</label>
-                <input 
-                    type="number" 
-                    id="price" 
-                    placeholder="Enter price per kg" 
-                    style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-bottom: 1rem;" 
-                    required
-                >
-
-                <!-- Total Price Display -->
-                <div id="total-price-container" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold; color: #4CAF50;">
-                    Total Price: 0
-                </div>
-        
-                <!-- Add Product Button -->
-                <button 
-                    type="button" 
-                    id="add-product-btn" 
-                    style="padding: 0.75rem; font-size: 1rem; border: none; border-radius: 4px; background-color: #4CAF50; color: white; cursor: pointer; width: 100%;"
-                >
-                    Add Product
-                </button>
-            </form>
-        </section>
-        
-        <section id="list-products">
-            <h2>List Products</h2>
-            <!-- Dropdown ve Button -->
-            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                <!-- Show Products Button -->
-                <button 
-                    type="button" 
-                    id="show-products-btn" 
-                    style="padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
-                >
-                    Show Products
-                </button>
-                <!-- Farmer Selection Dropdown -->
-                <select 
-                    id="farmer-product-dropdown" 
-                    style="flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
-                >
-                    <option value="" disabled selected>Select a farmer</option>
-                    <!-- Farmers will be dynamically added -->
-                </select>
-            </div>
-        
-            <!-- Products Table -->
-            <table id="products-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; display: none;">
-                <thead>
-                    <tr>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Product Name</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Weight (Kg)</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Price per Kg (₺)</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Total Price (₺)</th>
-                    </tr>
-                </thead>
-                <tbody id="products-table-body">
-                    <!-- Products will be dynamically added here -->
-                </tbody>
-            </table>
-        </section>
         
         
     </main>

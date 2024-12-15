@@ -29,6 +29,37 @@ main {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* İşaret Stili */
+.sortable {
+    position: relative;
+    padding-right: 20px;
+}
+
+/* Başlangıç durumu: düz çizgi */
+.sortable::after {
+    content: '\2014'; /* Düz çizgi (―) */
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: gray;
+    cursor: pointer;
+}
+
+/* Sıralama yapılmışsa yukarı ok */
+.sortable.sorted-asc::after {
+    content: '\25B2'; /* Yukarı ok (▲) */
+    color: black;
+}
+
+/* Sıralama yapılmışsa aşağı ok */
+.sortable.sorted-desc::after {
+    content: '\25BC'; /* Aşağı ok (▼) */
+    color: black;
+}
+
+
 /* Navigation Bar Stil */
 nav ul {
     list-style: none;
@@ -171,27 +202,27 @@ footer {
 }
 
 /* Add Farmer Bölümü */
-#add-farmer {
+#add-farmer, #add-product {
     text-align: left;
 }
 
-#add-farmer h2 {
+#add-farmer h2, #add-product h2 {
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
 }
 
-#add-farmer form {
+#add-farmer form, #add-product form {
     width: 100%;
 }
 
-#add-farmer label {
+#add-farmer label, #add-product label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
 }
 
-#add-farmer input {
+#add-farmer input, #add-product input {
     width: 100%; /* Genişliği %100 yapar */
     margin-bottom: 1rem;
     padding: 0.75rem; /* İç boşluk */
@@ -201,13 +232,13 @@ footer {
     box-sizing: border-box;
 }
 
-#add-farmer input:focus {
+#add-farmer input:focus, #add-product input:focus {
     border-color: #4CAF50;
     outline: none;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
-#add-farmer button {
+#add-farmer button, #add-product button {
     display: block;
     width: 100%; /* Genişliği tam genişlik yapar */
     padding: 0.75rem;
@@ -220,23 +251,23 @@ footer {
     transition: background-color 0.3s ease;
 }
 
-#add-farmer button:hover {
+#add-farmer button:hover, #add-product button:hover {
     background-color: #45a049;
 }
 
 /* List Farmers Bölümü */
-#list-farmers, #list-products {
+#list-farmers, #list-products, #list-purchases{
     margin-top: 2rem;
     text-align: left;
 }
 
-#list-farmers h2, #list-products h2{
+#list-farmers h2, #list-products h2, #list-purchases h2{
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
 }
 
-#list-farmers-btn, #list-products-btn {
+#list-farmers-btn, #list-products-btn, #list-purchases-btn {
     background-color: #4CAF50;
     color: white;
     margin-top: 1rem;
@@ -251,7 +282,7 @@ footer {
     transition: background-color 0.3s ease;
 }
 
-#list-farmers-btn:hover, #list-products-btn:hover{
+#list-farmers-btn:hover, #list-products-btn:hover, #list-purchases-btn:hover{
     background-color: #45a049;
 }
 
@@ -344,19 +375,20 @@ button.delete-btn:hover {
     }
 }
 
-/* Purchase Sayfası */
-#list-products {
+
+/* Search Products Bölümü */
+#search-product, #search-farmer {
     margin-top: 2rem;
     text-align: left;
 }
 
-#list-products h2 {
+#search-product h2, #search-farmer h2 {
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
 }
 
-#show-products-btn {
+#search-product-btn, #search-farmer-btn {
     background-color: #4CAF50;
     color: white;
     display: block;
@@ -366,10 +398,46 @@ button.delete-btn:hover {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin: 1rem auto; /* Butonu yatay olarak ortalar */
 }
 
-#show-products-btn:hover {
+#search-product-btn:hover, #search-farmer-btn:hover {
     background-color: #45a049;
+}
+
+#search-type, #search-value {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0.5rem 0; /* Aralarına boşluk ekler */
+    width: 100%; /* Responsive için tam genişlik sağlar */
+    max-width: 300px; /* Genişliği sınırlamak için */
+}
+
+#search-results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#search-results-table th, #search-results-table td {
+    border: 1px solid #ccc;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+#search-results-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#search-results-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#search-results-table tbody tr:hover {
+    background-color: #f1f1f1;
 }
 
 /* Dropdown */

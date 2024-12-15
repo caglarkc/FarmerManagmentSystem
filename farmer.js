@@ -10,7 +10,7 @@ let isSearching = false;
 const farmers = {};
 const products = {};
 const addFarmerBtn = document.querySelector('#add-farmer-btn');
-const listFarmetBtn = document.querySelector('#list-farmers-btn');
+const listFarmerBtn = document.querySelector('#list-farmers-btn');
 const searchFarmerBtn = document.querySelector('#search-farmer-btn');
 const addProductBtn = document.querySelector('#add-product-btn');
 const showProductsBtn = document.querySelector('#show-products-btn');
@@ -95,7 +95,7 @@ function loadFroductsFromLocalStorage() {
 }
 function setInvisibleFarmerTable() {
     document.getElementById('farmers-table').style.display = 'none'
-    listFarmetBtn.textContent = 'Show Farmers';
+    listFarmerBtn.textContent = 'Show Farmers';
     document.querySelector('#farmers-table-body').innerHTML = ''; 
     isFarmerTableVisible = false;
 }
@@ -132,7 +132,7 @@ function showFarmerListOnTable(farmer) {
         deleteBtnFarmer(farmer);
     });
 }
-listFarmetBtn.addEventListener('click', () => {
+listFarmerBtn.addEventListener('click', () => {
     if(isFarmerTableVisible) {
         setInvisibleFarmerTable();   
     }else {
@@ -142,7 +142,7 @@ listFarmetBtn.addEventListener('click', () => {
             const farmer = farmers[farmerId];
             showFarmerListOnTable(farmer);
         }
-        listFarmetBtn.textContent = 'Close Table';
+        listFarmerBtn.textContent = 'Close Table';
     }
 });
 function isFarmerInfoExist(name,email,phone) {
@@ -161,8 +161,6 @@ function isFarmerInfoExist(name,email,phone) {
     }
     return false;
 }
-
-
 function editBtnFarmer(row,farmer) {
     const cells = row.querySelectorAll('td');
 
@@ -303,8 +301,6 @@ function deleteBtnFarmer(farmer) {
     }
     
 }
-
-
 function searchFarmer() {
     clearSearchTable();
     hideSearchResults();

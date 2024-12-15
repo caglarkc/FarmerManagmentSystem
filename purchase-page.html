@@ -10,6 +10,17 @@
 <body class="purchase-page">
     <header>
         <h1>Purchase Page</h1>
+        <nav>
+            <ul>
+                <li><a href="home-page.html">Ana Sayfa</a></li>
+                <li><a href="farmer-page.html">Farmer Page</a></li>
+                <li><a href="purchase-page.html">Purchase Page</a></li>
+                <li><a href="sale-page.html">Sale Page</a></li>
+                <li><a href="buy-page.html">Buy Page</a></li>
+                <li><a href="inventory-page.html">Inventory Page</a></li>
+                <li><a href="report-page.html">Report Page</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
@@ -30,12 +41,12 @@
                     </tr>
                 </thead>
                 <tbody id="products-table-body">
-                    <!-- Farmers will be dynamically added here -->
+                    <!-- Farmers will be dynamically added here style="display: flex; flex-direction: column; align-items: center;"-->
                 </tbody>
             </table>
         </section>
 
-        <section id="search-product">
+        <section id="search-product" >
             <h2>Search Products</h2>
             <form id="search-product-form">
                 <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
@@ -44,6 +55,7 @@
                         id="search-type" 
                         style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
                     >
+                        <option value="" disabled selected>Select Type</option>
                         <option value="farmer-name">Farmer Name</option>
                         <option value="product-name">Product Name</option>
                     </select>
@@ -75,11 +87,33 @@
                         <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Price Of 1 Kg</th>
                         <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Total Price</th>
                         <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Farmer Name</th>
-                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Select</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Buy Kilogram</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Purchase</th>
                     </tr>
                 </thead>
                 <tbody id="search-results-body">
                     <!-- Dinamik olarak JS ile doldurulacak -->
+                </tbody>
+            </table>
+
+        </section>
+
+        <section id="list-purchases">
+            <h2>List Purchases</h2>
+            <button type="button" id="list-purchases-btn">Show Purchases</button>
+            <table id="purchases-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="product-name">Product Name</th>
+                        <th class="sortable" data-sort="farmer-name">Farmer Name</th>
+                        <th class="sortable" data-sort="date">Date</th>
+                        <th class="sortable" data-sort="weight">Weight (Kg)</th>
+                        <th class="sortable" data-sort="price">Price For 1Kg (TL)</th>
+                        <th class="sortable" data-sort="total-price">Total Price (TL)</th>
+                    </tr>
+                </thead>
+                <tbody id="purchases-table-body">
+                    <!-- Purchases will be dynamically added here -->
                 </tbody>
             </table>
         </section>
