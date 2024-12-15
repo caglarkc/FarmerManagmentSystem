@@ -256,12 +256,12 @@ footer {
 }
 
 /* List Farmers Bölümü */
-#list-farmers, #list-products, #list-purchases{
+#list-farmers, #list-products, #list-purchases, #filter-purchases{
     margin-top: 2rem;
     text-align: left;
 }
 
-#list-farmers h2, #list-products h2, #list-purchases h2{
+#list-farmers h2, #list-products h2, #list-purchases h2, #filter-purchases h2{
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
@@ -388,7 +388,7 @@ button.delete-btn:hover {
     text-align: center;
 }
 
-#search-product-btn, #search-farmer-btn {
+#search-product-btn, #search-farmer-btn, #show-results-btn {
     background-color: #4CAF50;
     color: white;
     display: block;
@@ -401,7 +401,7 @@ button.delete-btn:hover {
     margin: 1rem auto; /* Butonu yatay olarak ortalar */
 }
 
-#search-product-btn:hover, #search-farmer-btn:hover {
+#search-product-btn:hover, #search-farmer-btn:hover, #show-results-btn:hover {
     background-color: #45a049;
 }
 

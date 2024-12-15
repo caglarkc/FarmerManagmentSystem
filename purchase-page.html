@@ -118,6 +118,53 @@
             </table>
         </section>
 
+        <section id="filter-purchases">
+            <h2>Filter Purchases by Date</h2>
+            <div style="display: flex; gap: 1rem; align-items: center; margin: 1rem auto;">
+                <!-- Start Date Input -->
+                <label for="start-date">Start Date:</label>
+                <input 
+                    type="date" 
+                    id="start-date" 
+                    style="padding: 0.5rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                >
+        
+                <!-- End Date Input -->
+                <label for="end-date">End Date:</label>
+                <input 
+                    type="date" 
+                    id="end-date" 
+                    style="padding: 0.5rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                >
+        
+                <!-- Show Results Button -->
+                <button 
+                    type="button" 
+                    id="show-results-btn" 
+                    style="padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                >
+                    Show Results
+                </button>
+            </div>
+        
+            <!-- Filtered Purchases Table -->
+            <table id="filtered-purchases-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; display: none;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Product Name</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Farmer Name</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Date</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Weight (Kg)</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Price For 1Kg (TL)</th>
+                        <th style="border: 1px solid #ccc; padding: 0.75rem; text-align: center;">Total Price (TL)</th>
+                    </tr>
+                </thead>
+                <tbody id="filtered-purchases-body">
+                    <!-- Filtered purchases will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
+        
     </main>
 </body>
 </html>

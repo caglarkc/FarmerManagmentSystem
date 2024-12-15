@@ -5,6 +5,7 @@ const listProductsBtn = document.querySelector('#list-products-btn');
 const searchProductBtn = document.querySelector('#search-product-btn');
 const searchType = document.getElementById('search-type');
 const listPurchasesBtn = document.querySelector('#list-purchases-btn');
+const showFilterTableBtn = document.getElementById('show-results-btn');
 const farmers = {};
 const products = {};
 const purchases = {};
@@ -12,12 +13,12 @@ const productNames = [];
 let isSearching = false;
 let isBuySuccessfully = false;
 let isPurchaseTableVisible = false;
+let isFiltering = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     setInvisiblePurchaseTable();
     loadDataFromLocalStorage();
     addProductNames();
-    console.log(purchases);
 });
 // Farmer Name Dropdown'da değişiklik olduğunda çalışacak
 searchType.addEventListener('change', function() {
@@ -368,7 +369,6 @@ function showPurchaseListOnTable(purchase) {
 document.querySelectorAll('.sortable').forEach(header => {
     header.addEventListener('click', (event) => {
         const sortKey = event.target.getAttribute('data-sort'); // Başlıktaki data-sort değerini alır
-        console.log(`Header clicked for sorting by: ${sortKey}`);
         const isAscending = event.target.classList.contains('sorted-asc');
         document.querySelectorAll('.sortable').forEach(h => {
             h.classList.remove('sorted-asc', 'sorted-desc');
@@ -376,7 +376,6 @@ document.querySelectorAll('.sortable').forEach(header => {
 
         // Eğer zaten 'sorted-asc' varsa, 'sorted-desc' yap
         if (isAscending) {
-            console.log(sortKey);
             event.target.classList.add('sorted-desc');
             sortKeyWithWay(sortKey,'down');
             
@@ -388,76 +387,120 @@ document.querySelectorAll('.sortable').forEach(header => {
 });
 
 function sortKeyWithWay(sortKey,way) {
-    if(sortKey == 'product-name') {
-        if(way == 'up') {
-            const productNames = new Set();
-            for(const purchaseId in purchases) {
-                const purchase = purchases[purchaseId];
-                const productName = purchase.boughtProduct.productName;
-                productNames.add(productName);
-            }
-            const sortedProductNames = Array.from(productNames).sort();
-            console.log(sortedProductNames);
-        }else {
-            const productNames = new Set();
-            for(const purchaseId in purchases) {
-                const purchase = purchases[purchaseId];
-                const productName = purchase.boughtProduct.productName;
-                productNames.add(productName);
-            }
-            const sortedProductNames = Array.from(productNames).sort((a, b) => {
-                return b.localeCompare(a); // Alfabetik sıralamanın tersini yapar
-            });
-            console.log(sortedProductNames);
-        }
-    }else if(sortKey == 'farmer-name') {
-        if(way == 'up') {
-            const farmerNames = new Set();
-            for(const purchaseId in purchases) {
-                const purchase = purchases[purchaseId];
-                const farmerName = farmers[purchase.boughtProduct.farmerId].name;
-                farmerNames.add(farmerName);
-            }
-            const sortedFarmerNames = Array.from(farmerNames).sort();
-            console.log(sortedFarmerNames);
-        }else {
-            const farmerNames = new Set();
-            for(const purchaseId in purchases) {
-                const purchase = purchases[purchaseId];
-                const farmerName = farmers[purchase.boughtProduct.farmerId].name;
-                farmerNames.add(farmerName);
-            }
-            const sortedFarmerNames = Array.from(farmerNames).sort((a, b) => {
-                return b.localeCompare(a); // Alfabetik sıralamanın tersini yapar
-            });
-            console.log(sortedFarmerNames);
-        }
-    }else if(sortKey == 'date') {
-        if (way == 'up') {
-            const dates = [];
-            for (const purchaseId in purchases) {
-                const purchase = purchases[purchaseId];
-                const date = purchase.date; // Date formatı: "2024-12-15_11:57"
-                dates.push(date);
-            }
-            const sortedDates = dates.sort((a, b) => new Date(a.replace('_', 'T')) - new Date(b.replace('_', 'T')));
-            console.log(sortedDates);
-        } else {
-            const dates = [];
-            for (const purchaseId in purchases) {
-                const purchase = purchases[purchaseId];
-                const date = purchase.date; // Date formatı: "2024-12-15_11:57"
-                dates.push(date);
-            }
-            const sortedDates = dates.sort((a, b) => new Date(b.replace('_', 'T')) - new Date(a.replace('_', 'T')));
-            console.log(sortedDates);
-        }
+    if (sortKey == 'product-name') { 
+        sortAndShowPurchases('product-name', way);
+    } else if (sortKey == 'farmer-name') {
+        sortAndShowPurchases('farmer-name', way); 
+    } else if (sortKey == 'date') {
+        sortAndShowPurchases('date', way); 
     }else if(sortKey == 'weight') {
-        
+        sortAndShowPurchases('weight', way); 
     }else if(sortKey == 'price') {
-        
+        sortAndShowPurchases('price', way); 
     }else if(sortKey == 'total-price') {
-        
+        sortAndShowPurchases('total-price', way); 
     }
     
+}
+
+function sortAndShowPurchases( sortKey , way) {
+    let sortedPurchases;
+
+    // Anahtar (key) türüne göre sıralama yap
+    if (sortKey === 'product-name') {
+        sortedPurchases = Object.values(purchases).sort((a, b) => {
+            const nameA = a.boughtProduct.productName.toLowerCase();
+            const nameB = b.boughtProduct.productName.toLowerCase();
+            return way === 'up' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+        });
+    } else if (sortKey === 'farmer-name') {
+        sortedPurchases = Object.values(purchases).sort((a, b) => {
+            const nameA = farmers[a.boughtProduct.farmerId].name.toLowerCase();
+            const nameB = farmers[b.boughtProduct.farmerId].name.toLowerCase();
+            return way === 'up' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+        });
+    } else if (sortKey === 'date') {
+        sortedPurchases = Object.values(purchases).sort((a, b) => {
+            const dateA = new Date(a.date.replace('_', 'T'));
+            const dateB = new Date(b.date.replace('_', 'T'));
+            return way === 'up' ? dateA - dateB : dateB - dateA;
+        });
+    } else if (sortKey === 'weight') {
+        sortedPurchases = Object.values(purchases).sort((a, b) => {
+            const weightA = a.boughtProduct.weight;
+            const weightB = b.boughtProduct.weight;
+            return way === 'up' ? weightA - weightB : weightB - weightA;
+        });
+    } else if (sortKey === 'price') {
+        sortedPurchases = Object.values(purchases).sort((a, b) => {
+            const priceA = a.boughtProduct.price;
+            const priceB = b.boughtProduct.price;
+            return way === 'up' ? priceA - priceB : priceB - priceA;
+        });
+    } else if (sortKey === 'total-price') {
+        sortedPurchases = Object.values(purchases).sort((a, b) => {
+            const priceA = a.boughtProduct.totalPrice;
+            const priceB = b.boughtProduct.totalPrice;
+            return way === 'up' ? priceA - priceB : priceB - priceA;
+        });
+    }
+
+    // Tabloyu temizle
+    const tableBody = document.querySelector('#purchases-table-body');
+    tableBody.innerHTML = '';
+
+    // Sıralanmış listeyi tabloya ekle
+    for (const purchase of sortedPurchases) {
+        showPurchaseListOnTable(purchase);
+    }
+}
+
+showFilterTableBtn.addEventListener('click', () => {
+    const startDate = new Date(document.getElementById('start-date').value);
+    const endDate = new Date(document.getElementById('end-date').value);
+    const filteredBody = document.getElementById('filtered-purchases-body');
+
+    if (isFiltering) {
+        setInvisibleFilteringTable();
+        isFiltering = false;
+    }else {
+        setVisibleFilteringTable();
+        isFiltering = true;
+        filteredBody.innerHTML = ''; // Önce tabloyu temizle
+
+        for (const purchaseId in purchases) {
+            const purchase = purchases[purchaseId];
+            const purchaseDate = new Date(purchase.date.replace('_', 'T')); // Tarihi doğru formata dönüştür
+    
+            if (purchaseDate >= startDate && purchaseDate <= endDate) {
+                // Satır ekleme
+                const row = `
+                    <tr>
+                        <td>${purchase.boughtProduct.productName}</td>
+                        <td>${farmers[purchase.boughtProduct.farmerId].name}</td>
+                        <td>${purchase.date}</td>
+                        <td>${purchase.boughtProduct.weight}</td>
+                        <td>${purchase.boughtProduct.price}</td>
+                        <td>${purchase.boughtProduct.totalPrice}</td>
+                    </tr>
+                `;
+                filteredBody.insertAdjacentHTML('beforeend', row);
+            }
+        }
+    }
+    
+});
+
+// Tabloyu görünür yapma fonksiyonu
+function setVisibleFilteringTable() {
+    const table = document.getElementById('filtered-purchases-table');
+    table.style.display = 'table'; // Tabloyu görünür yapar
+    showFilterTableBtn.textContent = 'Close Results';
+}
+
+// Tabloyu görünmez yapma fonksiyonu
+function setInvisibleFilteringTable() {
+    const table = document.getElementById('filtered-purchases-table');
+    table.style.display = 'none'; // Tabloyu gizler
+    showFilterTableBtn.textContent = 'Show Results';
 }
