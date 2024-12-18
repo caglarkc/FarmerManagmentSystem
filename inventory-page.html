@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Page</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="inventory.js" defer></script>
+</head>
+<body class="inventory-page">
+    <header>
+        <h1>Inventory Page</h1>
+        <nav>
+            <ul>
+                <li><a href="home-page.html">Ana Sayfa</a></li>
+                <li><a href="farmer-page.html">Farmer Page</a></li>
+                <li><a href="purchase-page.html">Purchase Page</a></li>
+                <li><a href="inventory-page.html">Inventory Page</a></li>
+                <li><a href="sale-page.html">Sale Page</a></li>
+                <li><a href="buy-page.html">Buy Page</a></li>
+                <li><a href="report-page.html">Report Page</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="list-products">
+            <h2>List Products</h2>
+            <button type="button" id="list-products-btn">Show Products</button>
+            <table id ="products-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Unpackaged Weight</th>
+                        <th>Packaged Weight</th>
+                        <th>Packaged Count</th>
+                        <th>Min Alert Weight</th>
+                    </tr>
+                </thead>
+                <tbody id="products-table-body">
+                    <!-- Farmers will be dynamically added here style="display: flex; flex-direction: column; align-items: center;"-->
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="packaging-products">
+            <h2>Packaging Products</h2>
+            <div>
+                <!-- Search Value Dropdown -->
+                <select 
+                    id="search-value" 
+                    style="display: inline-block; margin-right: 1rem; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                >
+                    <option value="" disabled selected>Select Product</option>
+                </select>
+        
+                <!-- Search Button -->
+                <button 
+                type="button" 
+                id="search-product-btn" 
+                style="display: inline-block; margin-right: 1rem; padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                >
+                Search
+                </button>
+            </div>
+        </section>
+        
+    </main>
+</body>
+</html>

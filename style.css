@@ -255,13 +255,14 @@ footer {
     background-color: #45a049;
 }
 
+
 /* List Farmers Bölümü */
-#list-farmers, #list-products, #list-purchases, #filter-purchases{
+#list-farmers, #list-products, #list-purchases, #filter-purchases, #packaging-products{
     margin-top: 2rem;
     text-align: left;
 }
 
-#list-farmers h2, #list-products h2, #list-purchases h2, #filter-purchases h2{
+#list-farmers h2, #list-products h2, #list-purchases h2, #filter-purchases h2, #packaging-products h2{
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
@@ -324,35 +325,83 @@ table tbody tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Edit ve Delete Butonları */
+/* Edit Butonu */
 button.edit-btn {
-    background-color: #2196F3;
+    background-color: #2196F3; /* Yumuşak bir mavi tonu */
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
+    border-radius: 8px; /* Hafif yuvarlak köşeler */
+    font-size: 1rem;
+    font-weight: bold; /* Daha belirgin yazı */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease, transform 0.2s ease; /* Geçiş efektleri */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
 }
 
 button.edit-btn:hover {
-    background-color: #1e88e5;
+    background-color: #1e88e5; /* Daha koyu mavi hover tonu */
+    transform: scale(1.05); /* Hover sırasında hafif büyütme */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Daha belirgin bir gölge */
 }
 
+button.edit-btn:active {
+    background-color: #1565c0; /* Daha koyu bir ton tıklama için */
+    transform: scale(0.98); /* Tıklama sırasında hafif küçültme */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Daha düşük gölge */
+}
+
+/* Delete Butonu */
 button.delete-btn {
-    background-color: #f44336;
+    background-color: #f44336; /* Yumuşak bir kırmızı tonu */
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
+    border-radius: 8px; /* Hafif yuvarlak köşeler */
+    font-size: 1rem;
+    font-weight: bold; /* Daha belirgin yazı */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease, transform 0.2s ease; /* Geçiş efektleri */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
 }
 
 button.delete-btn:hover {
-    background-color: #e53935;
+    background-color: #e53935; /* Daha koyu kırmızı hover tonu */
+    transform: scale(1.05); /* Hover sırasında hafif büyütme */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Daha belirgin bir gölge */
+}
+
+button.delete-btn:active {
+    background-color: #c62828; /* Daha koyu bir ton tıklama için */
+    transform: scale(0.98); /* Tıklama sırasında hafif küçültme */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Daha düşük gölge */
+}
+
+
+/* Alert Btn */
+button.alert-btn {
+    background-color: #4caf50; /* Daha yumuşak bir yeşil tonu */
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px; /* Hafif yuvarlak köşeler */
+    font-size: 0.9rem;
+    font-weight: bold; /* Daha belirgin yazı */
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease; /* Geçiş efektleri */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+}
+
+button.alert-btn:hover {
+    background-color: #43a047; /* Daha koyu bir yeşil hover tonu */
+    transform: scale(1.05); /* Hover sırasında hafif büyütme */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Daha belirgin bir gölge */
+}
+
+button.alert-btn:active {
+    background-color: #388e3c; /* Daha koyu bir ton tıklama için */
+    transform: scale(0.98); /* Tıklama sırasında hafif küçültme */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Daha düşük gölge */
 }
 
 /* Responsive Tasarım */
@@ -401,7 +450,7 @@ button.delete-btn:hover {
     margin: 1rem auto; /* Butonu yatay olarak ortalar */
 }
 
-#search-product-btn:hover, #search-farmer-btn:hover, #show-results-btn:hover {
+#search-product-btn:hover, #search-farmer-btn:hover, #show-results-btn:hover{
     background-color: #45a049;
 }
 
@@ -476,4 +525,163 @@ button.delete-btn:hover {
 
 #products-table tbody tr:hover {
     background-color: #f1f1f1;
+}
+
+/* General Container Styling */
+#sell-products {
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 700px; /* Daha geniş görünüm */
+}
+
+#sell-products h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Product Selector Section */
+.product-selector-container {
+    margin-bottom: 1.5rem;
+}
+
+.product-selector-container label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.product-selector-container select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-selector-container select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Product Rows */
+.sell-product-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sell-product-row:hover {
+    background-color: #f1f1f1;
+    transform: translateY(-3px);
+}
+
+/* Product Labels */
+.package-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    min-width: 180px; /* Sabit genişlik */
+}
+
+.package-count,
+.sold-count {
+    font-size: 1rem;
+    color: #555;
+    margin-right: 1rem;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Input Fields */
+.count-input {
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 120px;
+    text-align: center;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.count-input:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+/* Checkbox Styling */
+.select-checkbox {
+    width: 1.5rem;
+    height: 1.5rem;
+    accent-color: #4CAF50;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Save Button */
+#save-sell-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#save-sell-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+#save-sell-btn:active {
+    background-color: #388e3c;
+    transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sell-product-row {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .package-label,
+    .package-count,
+    .sold-count,
+    .count-input {
+        text-align: center;
+        width: 100%;
+    }
+
+    #save-sell-btn {
+        width: 100%;
+    }
 }

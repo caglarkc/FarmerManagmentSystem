@@ -9,6 +9,7 @@ const showFilterTableBtn = document.getElementById('show-results-btn');
 const farmers = {};
 const products = {};
 const purchases = {};
+const inventory = {};
 const productNames = [];
 let isSearching = false;
 let isBuySuccessfully = false;
@@ -19,6 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setInvisiblePurchaseTable();
     loadDataFromLocalStorage();
     addProductNames();
+    //localStorage.clear();
+    //createData();
+    console.log(farmers);
+    console.log(products);
+    console.log(purchases);
+    console.log(inventory);
 });
 // Farmer Name Dropdown'da değişiklik olduğunda çalışacak
 searchType.addEventListener('change', function() {
@@ -33,11 +40,22 @@ function loadDataFromLocalStorage() {
     loadProductsFromLocalStorage();
     loadFarmersFromLocalStorage();
     loadPurchasesFromLocalStorage();
+    loadInventoryFromLocalStorage();
 }
 function saveDataToLocalStorage() {
     saveProductsToLocalStorage();
     saveFarmersToLocalStorage();
     savePurchasesToLocalStorage();
+    saveInventoryToLocalStorage();
+}
+function saveInventoryToLocalStorage() {
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+}
+function loadInventoryFromLocalStorage() {
+    const storedInventory = localStorage.getItem('inventory');
+    if (storedInventory) {
+        Object.assign(inventory, JSON.parse(storedInventory));
+    }
 }
 function saveFarmersToLocalStorage() {
     localStorage.setItem('farmers', JSON.stringify(farmers));
@@ -66,6 +84,7 @@ function loadPurchasesFromLocalStorage() {
         Object.assign(purchases, JSON.parse(storedPurchases));
     }
 }
+
 function addProductNames() {
     for (const productId in products) {
         const product = products[productId];
@@ -259,6 +278,7 @@ function showProductOnSearchTable(product) {
     tableBody.appendChild(row);
 
     const button = row.querySelector('.product-button');
+
     button.addEventListener('click', () => {
         const productId = event.target.dataset.productId;
         const inputValue = Number(document.getElementById(`input-${productId}`).value);
@@ -275,28 +295,55 @@ function showProductOnSearchTable(product) {
 
         // İstenilen formatta birleştir
         const date = `${year}-${month}-${day}_${hours}:${minutes}`;
+
         if (inputValue <= product.weight && inputValue > 0) {
             isBuySuccessfully = true;
-            const boughtProduct = JSON.parse(JSON.stringify(product));
             if (inputValue == product.weight) {
                 const farmer = farmers[product.farmerId];
                 const index = farmer.productIds.indexOf(productId);
                 farmer.productIds.splice(index, 1);
                 delete products[productId];
-
-            }else if (inputValue < product.weight){
+            }else if(inputValue < product.weight) {
                 product.weight = Number(product.weight) - Number (inputValue);
                 product.totalPrice = Number(product.weight) * Number(product.price);
-                
             }
-            delete boughtProduct.productId;
-            boughtProduct.weight = inputValue;
-            boughtProduct.totalPrice = Number(inputValue) * Number(boughtProduct.price);
+            const weight = inputValue;
+            const price = product.price;
+            const totalPrice = Number(inputValue) * Number(price);
+            const farmerId = product.farmerId;
+            const productName = product.productName;
             purchases[purchaseId] = {
                 purchaseId,
-                boughtProduct,
-                date
-            };
+                productName,
+                date,
+                weight,
+                price,
+                totalPrice,
+                farmerId
+            }
+            let isExistProduct = false;
+            for(const boughtProductId in inventory) {
+                const boughtProduct = inventory[boughtProductId];
+                if (product.productName == boughtProduct.productName) {
+                    isExistProduct = true;
+                    break;
+                }
+            }
+            if (!isExistProduct) {
+                const boughtProductId = `boughtProduct_${Date.now()}`;
+                inventory[boughtProductId] = {
+                    boughtProductId,
+                    productName,
+                    weight
+                }
+            }else {
+                for(const boughtProductId in inventory) {
+                    const boughtProduct = inventory[boughtProductId];
+                    if (product.productName == boughtProduct.productName) {
+                        boughtProduct.weight += Number(weight);
+                    }
+                }
+            }
             saveDataToLocalStorage();
             alert(`Başarı ile "${inputValue}"kg kadar "${product.productName}", "${totalPrice}"Tl ye alındı...`);
             setInvisiblePurchaseTable();
@@ -308,6 +355,8 @@ function showProductOnSearchTable(product) {
             alert(`Maximum "${product.weight}"kg kadar alınabilir...`);
         }
     })
+
+    
 }
 function showSearchResults() {
     document.getElementById('search-results-table').style.display = 'table'; // Tabloyu görünür yapar
@@ -344,13 +393,12 @@ function setVisiblePurchaseTable() {
 function showPurchaseListOnTable(purchase) {
     const tableBody = document.querySelector('#purchases-table-body');
     const row = document.createElement('tr');
-    const boughtProduct = purchase.boughtProduct;
-    const productName = boughtProduct.productName;
-    const farmerName = farmers[boughtProduct.farmerId].name;
+    const productName = purchase.productName;
+    const farmerName = farmers[purchase.farmerId].name;
     const date = purchase.date;
-    const weight = boughtProduct.weight;
-    const price = boughtProduct.price;
-    const totalPrice = boughtProduct.totalPrice;
+    const weight = purchase.weight;
+    const price = purchase.price;
+    const totalPrice = purchase.totalPrice;
 
     row.innerHTML = `
         <td>${productName}</td>
@@ -476,12 +524,12 @@ showFilterTableBtn.addEventListener('click', () => {
                 // Satır ekleme
                 const row = `
                     <tr>
-                        <td>${purchase.boughtProduct.productName}</td>
-                        <td>${farmers[purchase.boughtProduct.farmerId].name}</td>
+                        <td>${purchase.productName}</td>
+                        <td>${farmers[purchase.farmerId].name}</td>
                         <td>${purchase.date}</td>
-                        <td>${purchase.boughtProduct.weight}</td>
-                        <td>${purchase.boughtProduct.price}</td>
-                        <td>${purchase.boughtProduct.totalPrice}</td>
+                        <td>${purchase.weight}</td>
+                        <td>${purchase.price}</td>
+                        <td>${purchase.totalPrice}</td>
                     </tr>
                 `;
                 filteredBody.insertAdjacentHTML('beforeend', row);
@@ -503,4 +551,87 @@ function setInvisibleFilteringTable() {
     const table = document.getElementById('filtered-purchases-table');
     table.style.display = 'none'; // Tabloyu gizler
     showFilterTableBtn.textContent = 'Show Results';
+}
+function createData() {
+    const farmerId1 = `farmer_${Date.now()}`;
+    const farmerId2 = `farmer_${Date.now() + 1}`;
+    const farmerId3 = `farmer_${Date.now() + 2}`;
+    const productId1 = `product_${Date.now() }`;
+    const productId2 = `product_${Date.now() + 1}`;
+    const productId3 = `product_${Date.now() + 2}`;
+    const productId4 = `product_${Date.now() + 3}`;
+    const productId5 = `product_${Date.now() + 4}`;
+    farmers[farmerId1] = {
+        farmerId: farmerId1,
+        name: "Ali Çağlar Koçer",          // Farmer'ın adı
+        location: "İstanbul",      // Konumu
+        email: "alicaglarkocer@example.com", // E-posta adresi
+        phone: "5521791303",        // Telefon numarası
+        productIds: [productId1, productId2, productId3]
+    };
+
+    farmers[farmerId2] = {
+        farmerId: farmerId2,
+        name: "Buket Kaplaner",          // Farmer'ın adı
+        location: "İstanbul",      // Konumu
+        email: "buketkaplaner@example.com", // E-posta adresi
+        phone: "5511050729",        // Telefon numarası
+        productIds: [productId4]
+    };
+
+    farmers[farmerId3] = {
+        farmerId: farmerId3,
+        name: "Mehmet Koçer",          // Farmer'ın adı
+        location: "İstanbul",      // Konumu
+        email: "mehmetkocer@example.com", // E-posta adresi
+        phone: "5307215273",        // Telefon numarası
+        productIds: [productId5]
+    };
+
+    products[productId1] = {
+        productId: productId1,
+        farmerId: farmerId1,
+        productName: "Blueberry",  
+        weight: 2000,               
+        price: 60,                 
+        totalPrice: 2000 * 60       
+    };
+
+    products[productId2] = {
+        productId: productId2,
+        farmerId: farmerId1,
+        productName: "Banana",  
+        weight: 5000,               
+        price: 400,                 
+        totalPrice: 5000 * 40       
+    };
+
+    products[productId3] = {
+        productId: productId3,
+        farmerId: farmerId1,
+        productName: "Apple",  
+        weight: 1500,               
+        price: 30,                 
+        totalPrice: 1500 * 30       
+    };
+
+    products[productId4] = {
+        productId: productId4,
+        farmerId: farmerId2,
+        productName: "Blueberry",  
+        weight: 1000,               
+        price: 40,                 
+        totalPrice: 1000 * 40       
+    };
+
+    products[productId5] = {
+        productId: productId5,
+        farmerId: farmerId3,
+        productName: "Blueberry",  
+        weight: 3000,               
+        price: 50,                 
+        totalPrice: 3000 * 50       
+    };
+
+    saveDataToLocalStorage();
 }
