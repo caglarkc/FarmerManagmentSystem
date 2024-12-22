@@ -686,81 +686,135 @@ button.alert-btn:active {
     }
 }
 
-/* Product Cards Container */
-.product-cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
-    gap: 1.5rem;
+/* Main Container Styling */
+#product-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Product Section */
+.product-section {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-header {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+/* Package Container */
+.package-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
 }
 
 /* Product Card */
 .product-card {
-    background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    padding: 15px;
+    width: 250px;
+    height: 450px; /* Sabit bir yükseklik ekleniyor */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
 }
 
 /* Product Image */
-.product-card img {
+.product-image {
     width: 100%;
-    height: 220px;
-    object-fit: cover; /* Görselin kart içine sığması */
+    height: 150px; /* Sabit bir yükseklik */
+    object-fit: cover; /* Resmin kart içinde düzgün görünmesi sağlanır */
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 /* Product Details */
 .product-details {
-    padding: 1rem;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%; /* Detayların genişliği kartın genişliğiyle uyumlu olacak */
 }
 
-.product-details h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: #4CAF50;
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
 }
 
-.product-details p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
+.product-count,
+.product-price {
+    font-size: 14px;
     color: #555;
+    margin: 0; /* Paragrafların ekstra boşluk bırakmasını engeller */
+    text-align: center;
+    padding: 10px; /* İçerik için biraz boşluk */
+    background-color: #f9f9f9; /* Hafif bir arka plan rengi */
+    border-radius: 5px; /* Köşeleri yuvarlat */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* İnce gölge */
+}
+.editable {
+    border: 2px dashed #08cd16; /* Kesik mavi kenarlık */
+    border-radius: 5px; /* Köşeleri yuvarlat */
+    padding: 5px; /* İçerik için boşluk */
+    background-color: #eaf4fc; /* Hafif mavi arka plan */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    transition: all 0.3s ease; /* Yumuşak animasyon */
+}
+
+.editable:focus {
+    outline: none; /* Varsayılan çerçeveyi kaldır */
+    border-color: #08cd16; /* Daha koyu mavi kenarlık */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Daha belirgin gölge */
 }
 
 /* Buttons */
-.product-card button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+.edit-button,
+.delete-button {
+    width: 100%; /* Butonlar kartın genişliğini kaplar */
+    padding: 10px 15px;
     border-radius: 4px;
-    padding: 0.5rem 1rem;
+    font-size: 14px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
-.product-card button:hover {
-    background-color: #45a049;
+.edit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
 }
 
-/* Category Header */
-.category-header {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 2rem;
-    color: #4CAF50;
-    text-align: left;
+.edit-button:hover {
+    background-color: #0056b3;
 }
 
-/* Category Container */
-.category-container {
-    display: flex;
-    flex-direction: column; /* Stack cards vertically */
-    gap: 1rem;
-    margin-top: 1rem;
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+}
+
+.delete-button:hover {
+    background-color: #b02a37;
 }

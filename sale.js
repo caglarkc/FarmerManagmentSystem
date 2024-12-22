@@ -12,17 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDataFromLocalStorage();
     populateProductSelector();
     renderProductCards();
+    
+    /*
     console.log('FARMERS');
     console.log(farmers);
+
     console.log('PRODUCTS');
     console.log(products);
+
     console.log('PRUCHASES');
     console.log(purchases);
+*/
     console.log('İNVENTORY');
     console.log(inventory);
+    
     console.log('SALES');
     console.log(onSales);
-});
+    });
 
 
 function loadDataFromLocalStorage() {
@@ -85,107 +91,12 @@ function loadPurchasesFromLocalStorage() {
     }
 }
 
-// Dropdown'dan seçim yapıldığında çağırılacak
-document.getElementById('product-selector').addEventListener('change', (e) => {
-    const boughtProductId = e.target.value;
-    getSalesByProduct(boughtProductId);
-});
+
 
 // Sayfa yüklendiğinde selector'u doldur
 document.addEventListener('DOMContentLoaded', () => {
     populateProductSelector();
 });
-
-// Seçilen ürüne göre satış listesini oluştur
-function getSalesByProduct(boughtProductId) {
-    const container = document.getElementById('sell-products-container');
-    container.innerHTML = ''; // Önce içeriği temizle
-
-    const product = inventory[boughtProductId];
-    if (!product || !product.packages) return;
-
-    // Ürün başlığı
-    const productHeader = document.createElement('h3');
-    productHeader.textContent = `Product: ${product.productName}`;
-    productHeader.classList.add('product-header');
-    container.appendChild(productHeader);
-
-    // Paketleri ağırlıklarına göre sıralamak için diziye dönüştür
-    const sortedPackages = Object.values(product.packages).sort((a, b) => a.weight - b.weight);
-
-    // Sıralı paketleri göster
-    sortedPackages.forEach(packageItem => {
-        let isPackageExist = false;
-        const row = document.createElement('div');
-        row.classList.add('sell-product-row');
-        let p = 0;
-        let c = 0;
-
-        for (const onSaleId in onSales) {
-            const onSale = onSales[onSaleId];
-            if (onSale.boughtProductId == boughtProductId && onSale.packageWeight == packageItem.weight) {
-                isPackageExist = true;
-                    p = onSale.price;
-                    c = onSale.count;
-                    break;
-            }
-        }
-
-        // Paket adı
-        const packageLabel = document.createElement('span');
-        packageLabel.textContent = `${packageItem.type} (${packageItem.weight}kg)`;
-        packageLabel.classList.add('package-label');
-
-        packageLabel.dataset.type = packageItem.type; 
-
-        // Paket sayısı
-        const packageCount = document.createElement('span');
-        packageCount.textContent = `Count: ${packageItem.count}`;
-        packageCount.classList.add('package-count');
-
-         // Satıştaki paket sayısı
-         const soldCount = document.createElement('span');
-         soldCount.textContent = `On Sold: ${packageItem.soldCount || 0}`;
-         soldCount.classList.add('sold-count');
-
-         // Adet girişi
-         const inputCount = document.createElement('input');
-         inputCount.type = 'number';
-         inputCount.min = '0';
-         inputCount.placeholder = 'Enter count';
-         inputCount.classList.add('count-input');
-         inputCount.dataset.packageType = packageItem.type;
-
-         // Fiyat girişi
-         const inputPrice = document.createElement('input');
-         inputPrice.type = 'number';
-         inputPrice.min = '0';
-         inputPrice.placeholder = 'Enter price';
-         inputPrice.classList.add('price-input');
-
-         // Checkbox (Tick)
-         const checkbox = document.createElement('input');
-         checkbox.type = 'checkbox';
-         checkbox.classList.add('select-checkbox');
-         checkbox.dataset.packageType = packageItem.type;
-
-        if(isPackageExist) {
-            soldCount.textContent = `On Sold: ${c} \nPrice: ${p}`;
-            inputPrice.disabled = true;
-        }
-       
-        // Satır elemanlarını birleştir
-        row.setAttribute('isExist', isPackageExist);
-        row.setAttribute('price', p);
-        row.appendChild(packageLabel);
-        row.appendChild(packageCount);
-        row.appendChild(soldCount);
-        row.appendChild(inputCount);
-        row.appendChild(inputPrice);
-        row.appendChild(checkbox);
-        container.appendChild(row);
-    });
-}
 
 // Dropdown'u doldur
 function populateProductSelector() {
@@ -202,6 +113,111 @@ function populateProductSelector() {
         }
     }
 }
+// Dropdown'dan seçim yapıldığında çağırılacak
+document.getElementById('product-selector').addEventListener('change', (e) => {
+    const boughtProductId = e.target.value;
+    getSalesByProduct(boughtProductId);
+});
+
+function getSalesByProduct(boughtProductId) {
+    const container = document.getElementById('sell-products-container');
+    container.innerHTML = ''; // Önce içeriği temizle
+
+    const product = inventory[boughtProductId];
+    if (!product || !product.packages) return;
+
+    // Ürün başlığı
+    const productHeader = document.createElement('h3');
+    productHeader.textContent = `Product: ${product.productName}`;
+    productHeader.classList.add('product-header');
+    container.appendChild(productHeader);
+
+    // Paketleri ağırlıklarına göre sıralamak için diziye dönüştür
+    const sortedPackages = Object.values(product.packages).sort((a, b) => a.weight - b.weight);
+
+    
+
+    // Sıralı paketleri göster
+    sortedPackages.forEach(packageItem => {
+        let isPackageExist = false;
+        const row = document.createElement('div');
+        row.classList.add('sell-product-row');
+        let p = 0;
+        let c = 0;
+
+        const onSale = onSales[product.productName];
+        if (onSale != null) {
+            const packages = onSale.packages;
+            for (const type in packages) {
+                const pW = packages[type].packageWeight;
+                if (pW == packageItem.weight) {
+                    isPackageExist = true;
+                    p = packages[type].price;
+                    c = packages[type].count;
+                    break;
+                }
+            }
+        }
+        
+
+
+        // Paket adı
+        const packageLabel = document.createElement('span');
+        packageLabel.textContent = `${packageItem.type} (${packageItem.weight}kg)`;
+        packageLabel.classList.add('package-label');
+
+        packageLabel.dataset.type = packageItem.type; 
+
+        // Paket sayısı
+        const packageCount = document.createElement('span');
+        packageCount.textContent = `Count: ${packageItem.count}`;
+        packageCount.classList.add('package-count');
+
+        // Satıştaki paket sayısı
+        const soldCount = document.createElement('span');
+        soldCount.textContent = `On Sold: ${packageItem.soldCount || 0}`;
+        soldCount.classList.add('sold-count');
+
+        // Adet girişi
+        const inputCount = document.createElement('input');
+        inputCount.type = 'number';
+        inputCount.min = '0';
+        inputCount.placeholder = 'Enter count';
+        inputCount.classList.add('count-input');
+        inputCount.dataset.packageType = packageItem.type;
+
+        // Fiyat girişi
+        const inputPrice = document.createElement('input');
+        inputPrice.type = 'number';
+        inputPrice.min = '0';
+        inputPrice.placeholder = 'Enter price';
+        inputPrice.classList.add('price-input');
+
+        // Checkbox (Tick)
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.classList.add('select-checkbox');
+        checkbox.dataset.packageType = packageItem.type;
+
+        if(isPackageExist) {
+            soldCount.textContent = `On Sold: ${c} \nPrice: ${p}`;
+            inputPrice.disabled = true;
+        }
+       
+        // Satır elemanlarını birleştir
+        row.setAttribute('isExist', isPackageExist);
+        row.setAttribute('price', p);
+       
+        row.appendChild(packageLabel);
+        row.appendChild(packageCount);
+        row.appendChild(soldCount);
+        row.appendChild(inputCount);
+        row.appendChild(inputPrice);
+        row.appendChild(checkbox);
+        container.appendChild(row);
+    });
+}
+
 saveSellBtn.addEventListener('click', () => {
     let isCompleted = true;
     let checkboxCounter = 0;
@@ -216,43 +232,45 @@ saveSellBtn.addEventListener('click', () => {
     const rows = document.querySelectorAll('.sell-product-row');
     const data = []; // Toplanan verileri tutacak dizi
 
-    rows.forEach(row => {
-        const isExist = row.getAttribute('isExist');
-        const checkbox = row.querySelector('.select-checkbox'); // Checkbox
-        const countInput = row.querySelector('.count-input'); // Sayı inputu
-        const priceInput = row.querySelector('.price-input'); // Fiyat inputu
-        const packageLabel = row.querySelector('.package-label'); // Paket adı (etiket)
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const isExist = row.getAttribute('isExist') === 'true';
+        const checkbox = row.querySelector('.select-checkbox');
+        const countInput = row.querySelector('.count-input');
+        const priceInput = row.querySelector('.price-input');
+        const packageLabel = row.querySelector('.package-label');
         const type = packageLabel.dataset.type;
         const typecount = product.packages[type].count;
         const countValue = parseInt(countInput.value, 10) || 0;
         let priceValue = 0;
-        if(isExist) {
+    
+        if (isExist) {
             priceValue = row.getAttribute('price');
-        }else {
+        } else {
             priceValue = parseInt(priceInput.value, 10) || 0;
         }
+    
         if (checkbox.checked) {
             checkboxCounter += 1;
-            if (countValue <= typecount && countValue > 0 && priceValue > 0) { // Checkbox seçiliyse
+            if (countValue <= typecount && countValue > 0 && priceValue > 0) {
                 isCompleted = true;
                 data.push({
                     packageType: type,
                     count: countValue,
-                    price: priceValue
+                    price: priceValue,
                 });
-                
-            
-            }else if(countValue > typecount) {
+            } else if (countValue > typecount) {
+                isCompleted = false;
                 alert('Bu kadar paketlenmiş ürününüz bulumamaktadır...');
-            }else {
+                break; // Döngüyü tamamen durdurur
+            } else {
                 isCompleted = false;
                 alert('Sayılar eksi değer veya sıfır olamazlar, lütfen kontrol edin...');
-                return;
+                break; // Döngüyü tamamen durdurur
             }
         }
-        
-        
-    });
+    }
+    
 
 
     if(checkboxCounter > 0) {
@@ -266,7 +284,6 @@ saveSellBtn.addEventListener('click', () => {
                 let productPackagedW = product.packagedWeight;
                 const packageWeight = product.packages[type].weight;
                 const productName = product.productName;
-    
                 if (product.packages[type].count == count) {
                     delete product.packages[type];
                     productPackagedW -= Number(count) * Number(packageWeight);
@@ -275,32 +292,38 @@ saveSellBtn.addEventListener('click', () => {
                     productPackagedW -= Number(count) * Number(packageWeight);
                 }
                 product.packagedWeight = productPackagedW;
-                const boughtProductId = product.boughtProductId;
     
-                for(const onSaleId in onSales) {
-                    const onSale = onSales[onSaleId];
-                    const pw = onSale.packageWeight;
-                    const pn = inventory[onSale.boughtProductId].productName;
-                    if (productName == pn) {
-                        if (packageWeight == pw) {
+                for(const productName in onSales) {
+                    const onSale = onSales[productName];
+                    const packages = onSale.packages;
+                    for (const type in packages) {
+                        if (productName == product.productName  && type == item.packageType) {
+                            console.log("burada");
                             isUpdatedOnSale = true;
-                            onSale.count += Number(count);
+                            onSale.packages[type].count += Number(count);
                             break;
                         }
                     }
-    
                 }
-    
+
+                
                 if(!isUpdatedOnSale) {
-                    const onSaleId = `onSale_${Date.now() + "_" + counter}`;
-                    onSales[onSaleId] = {
-                        onSaleId,
-                        boughtProductId,
+                    if (!onSales[productName]) {
+                        onSales[productName] = {
+                            productName,
+                            packages: {}
+                        };
+                    }
+                    
+                    // Eğer `packages` zaten varsa, üzerine yazmadan yeni bir paket ekleyin
+                    onSales[productName].packages[type] = {
                         type,
                         packageWeight,
                         count,
                         price
-                    }
+                    };
+                }else {
+                    console.log(isUpdatedOnSale);
                 }
                 
                 counter += 1;
@@ -314,10 +337,10 @@ saveSellBtn.addEventListener('click', () => {
     
             
         }else {
-            calert("HATA ALINDI");
+            alert("HATA ALINDI");
         }
     }else {
-        calert("CHECKBOX SEÇİLMEMİŞ");
+        alert("CHECKBOX SEÇİLMEMİŞ");
     }
 
 })
@@ -332,65 +355,244 @@ const productImages = {
     "5": "images/5kg.png"
 };
 
-// Function to render product cards
 function renderProductCards() {
     const container = document.getElementById('product-cards-container');
     container.innerHTML = ''; // Clear container
 
-    for (const onSaleId in onSales) {
-        const onSale = onSales[onSaleId];
-        const boughtProduct = inventory[onSale.boughtProductId];
 
-        
-        const productCard = document.createElement('div');
-        productCard.classList.add('product-card');
+    for (const productName in onSales) {
+        const onSale = onSales[productName];
+        const packages = onSale.packages;
 
-        // Product Image
-        const productImage = document.createElement('img');
-        productImage.src = productImages[onSale.packageWeight] || 'images/5kg.png';
-        productImage.alt = `${onSale.type} Image`;
+        // Create a section for each product
+        const productSection = document.createElement('div');
+        productSection.classList.add('product-section');
 
-        // Product Details
-        const productDetails = document.createElement('div');
-        productDetails.classList.add('product-details');
+        // Product Header (Product Name)
+        const productHeader = document.createElement('h2');
+        productHeader.textContent = productName;
+        productHeader.classList.add('product-header');
 
-        const productName = document.createElement('h3');
-        const name = inventory[onSale.boughtProductId].productName;
-        const packageW = onSale.packageWeight
-        productName.textContent = `${packageW}Kg ${name}`;
+        productSection.appendChild(productHeader);
 
-        const productCount = document.createElement('p');
-        const count = onSale.count;
-        productCount.textContent = `Available Count: ${count}`;
+        // Packages for the product
+        const packageContainer = document.createElement('div');
+        packageContainer.classList.add('package-container');
 
-        const productPrice = document.createElement('p');
-        const price = onSale.price;
-        productPrice.textContent = `Price: $${price}`;
+        // Convert packages to an array and sort by weight
+        const sortedPackages = Object.values(packages).sort((a, b) => a.packageWeight - b.packageWeight);
 
-        // Button
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit Now';
-        editButton.addEventListener('click', () => {
+        for (const package of sortedPackages) {
+            let isEditing = false; // Boolean to track editing state
             
-        });
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
 
-        // Button
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete Now';
-        deleteButton.style.backgroundColor = 'red';
-        deleteButton.addEventListener('click', () => {
-    
-        });
-        // Append elements
-        productDetails.appendChild(productName);
-        productDetails.appendChild(productCount);
-        productDetails.appendChild(productPrice);
-        productDetails.appendChild(editButton);
-        productDetails.appendChild(deleteButton);
+            // Product Image
+            const productImage = document.createElement('img');
+            productImage.src = productImages[package.packageWeight] || 'images/5kg.png';
+            productImage.alt = `${package.type} Image`;
+            productImage.classList.add('product-image');
 
-        productCard.appendChild(productImage);
-        productCard.appendChild(productDetails);
+            // Product Details
+            const productDetails = document.createElement('div');
+            productDetails.classList.add('product-details');
 
-        container.appendChild(productCard);
+            const productTitle = document.createElement('h3');
+            const name = onSale.productName;
+            const packageW = package.packageWeight;
+            productTitle.textContent = `${packageW}Kg ${name}`;
+            productTitle.classList.add('product-title');
+
+            const productCount = document.createElement('p');
+            const count = package.count;
+            productCount.textContent = `Count: ${count}`;
+            productCount.classList.add('product-count');
+            productCount.setAttribute('contenteditable', false);
+
+            const productPrice = document.createElement('p');
+            const price = package.price;
+            productPrice.textContent = `Price: $${price}`;
+            productPrice.classList.add('product-price');
+            productPrice.setAttribute('contenteditable', false);
+
+            // Edit Button
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit Now';
+            editButton.classList.add('edit-button');
+
+            // Delete Button
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete Now';
+            deleteButton.classList.add('delete-button');
+
+            // Edit Button Logic
+            editButton.addEventListener('click', () => {
+                let availablePackage = 0;
+                let boughtProduct = null;
+                for (const boughtProductId in inventory) {
+                    if (inventory[boughtProductId].productName == productName) {
+                        boughtProduct = inventory[boughtProductId];
+                        availablePackage = boughtProduct.packages[package.type].count;
+                        break;
+                    }
+                }
+                if (isEditing) {
+                    // Save mode
+                    const newCount = parseInt(productCount.textContent, 10); // Get the raw number
+                    const newPrice = parseFloat(productPrice.textContent, 10); // Get the raw number
+            
+                    if (newCount == count && newPrice == price) {
+                        alert('Invalid input! Please enter different count or price.');
+                        return;
+                    }
+                    if (newCount > Number(availablePackage) + Number(package.count)) {
+                        alert('Envanterde bu kadar package yok...');
+                        return;
+                    }
+
+                    if (isNaN(newCount) || isNaN(newPrice) || newCount <= 0 || newPrice <= 0) {
+                        alert('Invalid input! Please enter valid numbers for count and price.');
+                        return;
+                    }
+            
+                    // Update package data
+                    boughtProduct.packages[package.type].count = Number(availablePackage) + Number(package.count) - Number(newCount);
+                    package.count = newCount;
+                    package.price = newPrice;
+                    
+
+
+            
+                    // Add back the formatted text
+                    productCount.textContent = `Available Count: ${newCount}`;
+                    productPrice.textContent = `Price: $${newPrice}`;
+            
+                    // Disable editing
+                    productCount.setAttribute('contenteditable', false);
+                    productPrice.setAttribute('contenteditable', false);
+            
+                    // Remove editable styles
+                    productCount.classList.remove('editable');
+                    productPrice.classList.remove('editable');
+            
+                    // Remove hint
+                    const hint = productDetails.querySelector('.available-hint');
+                    if (hint) {
+                        hint.remove();
+                    }
+            
+                    // Update buttons
+                    editButton.textContent = 'Edit Now';
+                    deleteButton.textContent = 'Delete Now';
+            
+                    isEditing = false;
+                    saveDataToLocalStorage();
+                } else {
+                    // Edit mode
+                    isEditing = true;
+            
+                    // Extract numbers from strings
+                    const countValue = productCount.textContent.replace(/[^0-9]/g, ''); // Keep only digits
+                    const priceValue = productPrice.textContent.replace(/[^0-9.]/g, ''); // Keep digits and decimal point
+            
+                    // Set raw numbers as text for editing
+                    productCount.textContent = countValue;
+                    productPrice.textContent = priceValue;
+            
+                    // Add hint below productCount
+                    const hint = document.createElement('small');
+                    hint.textContent = `Available in Inventory: ${availablePackage}`;
+                    hint.classList.add('available-hint');
+                    hint.style.color = '#555';
+                    hint.style.fontSize = '12px';
+                    productDetails.insertBefore(hint, productPrice);
+            
+                    // Add editable styles
+                    productCount.classList.add('editable');
+                    productPrice.classList.add('editable');
+            
+                    // Enable editing
+                    productCount.setAttribute('contenteditable', true);
+                    productPrice.setAttribute('contenteditable', true);
+            
+                    // Update buttons
+                    editButton.textContent = 'Save';
+                    deleteButton.textContent = 'Close';
+                }
+            });
+            
+            deleteButton.addEventListener('click', () => {
+                if (isEditing) {
+                    // Close mode
+                    isEditing = false;
+            
+                    // Revert changes to original data
+                    productCount.textContent = `Available Count: ${package.count}`;
+                    productPrice.textContent = `Price: $${package.price}`;
+            
+                    // Disable editing
+                    productCount.setAttribute('contenteditable', false);
+                    productPrice.setAttribute('contenteditable', false);
+            
+                    // Remove editable styles
+                    productCount.classList.remove('editable');
+                    productPrice.classList.remove('editable');
+            
+                    // Remove hint
+                    const hint = productDetails.querySelector('.available-hint');
+                    if (hint) {
+                        hint.remove();
+                    }
+            
+                    // Update buttons
+                    editButton.textContent = 'Edit Now';
+                    deleteButton.textContent = 'Delete Now';
+                } else {
+                    // Delete mode
+                    const confirmation = confirm('Are you sure you want to delete this package?');
+                    if (confirmation) {
+                        // Remove the product card from the DOM
+                        productCard.remove();
+            
+                        // Optional: Remove package from data
+
+                        for (const boughtProductId in inventory) {
+                            if (inventory[boughtProductId].productName == productName) {
+                                const boughtProduct = inventory[boughtProductId];
+                                boughtProduct.packages[package.type].count += package.count;
+                                break;
+                            }
+                        }
+                        delete onSales[productName].packages[package.type];
+                        console.log(`${package.type} package deleted.`);
+                        saveDataToLocalStorage();
+                    }
+                }
+            });
+            
+
+            // Append elements to product details
+            productDetails.appendChild(productTitle);
+            productDetails.appendChild(productCount);
+            productDetails.appendChild(productPrice);
+            productDetails.appendChild(editButton);
+            productDetails.appendChild(deleteButton);
+
+            // Append image and details to product card
+            productCard.appendChild(productImage);
+            productCard.appendChild(productDetails);
+
+            // Add product card to package container
+            packageContainer.appendChild(productCard);
+        }
+
+        // Append package container to product section
+        productSection.appendChild(packageContainer);
+
+        // Append product section to main container
+        container.appendChild(productSection);
     }
 }
+
+

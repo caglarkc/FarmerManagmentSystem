@@ -5,6 +5,7 @@ const farmers = {};
 const products = {};
 const purchases = {};
 const inventory = {};
+const onSales = {};
 const productNames = [];
 let isProductTableVisible = false;
 let isSearching = false;
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(products);
     console.log(purchases);
     console.log(inventory);
+    console.log(onSales);
 });
 
 function loadDataFromLocalStorage() {
@@ -37,6 +39,7 @@ function loadDataFromLocalStorage() {
     loadFarmersFromLocalStorage();
     loadPurchasesFromLocalStorage();
     loadInventoryFromLocalStorage();
+    loadOnSalesFromLocalStorage();
 }
 function saveDataToLocalStorage() {
     saveProductsToLocalStorage();
@@ -55,6 +58,12 @@ function loadInventoryFromLocalStorage() {
 }
 function saveFarmersToLocalStorage() {
     localStorage.setItem('farmers', JSON.stringify(farmers));
+}
+function loadOnSalesFromLocalStorage() {
+    const storedOnSales = localStorage.getItem('onSales');
+    if (storedOnSales) {
+        Object.assign(onSales, JSON.parse(storedOnSales));
+    }
 }
 function loadFarmersFromLocalStorage() {
     const storedFarmers = localStorage.getItem('farmers');
@@ -140,6 +149,17 @@ function showProductOnListTable(productName,totalWeight,alert,boughtProductId) {
     const product = inventory[boughtProductId];
     let totalW = 0;
     
+    //Satıştaki ürünlerin kilolarını alma
+    const onSale = onSales[productName];
+    let onSaleWeight = 0;
+    if (onSale != null) {
+        const packages = onSale.packages;
+        for (const type in packages) {
+            const package = packages[type];
+            onSaleWeight += Number(package.packageWeight) * Number(package.count);
+        }
+    }
+
     // Paket bilgilerini al ve diziye ekle
     for (const type in product.packages) {
         const packageItem = product.packages[type];
@@ -156,12 +176,13 @@ function showProductOnListTable(productName,totalWeight,alert,boughtProductId) {
 
     // Formatlanmış paket bilgilerini birleştir
     const packageDetailsFormatted = packageDetailsArray
-        .map(pkg => `${pkg.weight}kg count: ${pkg.count}`)
+        .map(pkg => `${pkg.weight}kg * ${pkg.count}`)
         .join('<br>');
         
 
     row.innerHTML = `
         <td>${productName}</td>
+        <td>${onSaleWeight + " Kg"}</td>
         <td>${totalWeight + " Kg"}</td>
         <td>${totalW + " Kg"}</td>
         <td>${packageDetailsFormatted}</td>
@@ -316,15 +337,20 @@ function createPackagingRow(category, maxInventory, totalWeightDisplay) {
     categoryLabel.textContent = `${category.label} (${category.weight}kg)`;
     categoryLabel.style.width = "150px";
 
-    // Minus Button
-    const minusBtn = document.createElement('button');
-    minusBtn.textContent = "-";
-    styleButton(minusBtn);
+    // Minus 100 Button
+    const minusThousandBtn = document.createElement('button');
+    minusThousandBtn.textContent = "-100";
+    styleButton(minusThousandBtn);
 
     // Minus 10 Button
     const minusTenBtn = document.createElement('button');
     minusTenBtn.textContent = "-10";
     styleButton(minusTenBtn);
+
+    // Minus Button
+    const minusBtn = document.createElement('button');
+    minusBtn.textContent = "-";
+    styleButton(minusBtn);
 
     // Count Display
     const countDisplay = document.createElement('span');
@@ -344,11 +370,18 @@ function createPackagingRow(category, maxInventory, totalWeightDisplay) {
     plusTenBtn.textContent = "+10";
     styleButton(plusTenBtn);
 
+    // Plus 100 Button
+    const plusThousandBtn = document.createElement('button');
+    plusThousandBtn.textContent = "+100";
+    styleButton(plusThousandBtn);
+
     // Button Actions
     plusBtn.addEventListener('click', () => updateCount(1));
     minusBtn.addEventListener('click', () => updateCount(-1));
     plusTenBtn.addEventListener('click', () => updateCount(10));
     minusTenBtn.addEventListener('click', () => updateCount(-10));
+    plusThousandBtn.addEventListener('click', () => updateCount(100));
+    minusThousandBtn.addEventListener('click', () => updateCount(-100));
 
     function updateCount(amount) {
         const addedWeight = category.weight * Math.abs(amount);
@@ -376,16 +409,19 @@ function createPackagingRow(category, maxInventory, totalWeightDisplay) {
 
     // Append elements to row
     row.appendChild(categoryLabel);
+    row.appendChild(minusThousandBtn);
     row.appendChild(minusTenBtn);
     row.appendChild(minusBtn);
     row.appendChild(countDisplay);
     row.appendChild(plusBtn);
     row.appendChild(plusTenBtn);
+    row.appendChild(plusThousandBtn);
 
     // Add row to the container
     const selectedProductContainer = document.getElementById('selected-product-container');
     selectedProductContainer.appendChild(row);
 }
+
 
 // Function to style buttons
 function styleButton(button) {

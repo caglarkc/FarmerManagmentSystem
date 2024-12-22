@@ -26,7 +26,7 @@ document.querySelector('#price').addEventListener('input', calculateTotalPrice);
 
 document.addEventListener('DOMContentLoaded', () => {
     loadFarmersFromLocalStorage();
-    loadFroductsFromLocalStorage();
+    loadProductsFromLocalStorage();
     setInvisibleFarmerTable();
     setInvisibleProductTable();
     hideSearchResults();
@@ -87,7 +87,7 @@ function loadFarmersFromLocalStorage() {
 function saveProductsToLocalStorage() {
     localStorage.setItem('products', JSON.stringify(products));
 }
-function loadFroductsFromLocalStorage() {
+function loadProductsFromLocalStorage() {
     const storedProducts = localStorage.getItem('products');
     if (storedProducts) {
         Object.assign(products, JSON.parse(storedProducts));
