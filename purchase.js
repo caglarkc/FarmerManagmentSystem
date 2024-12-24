@@ -556,82 +556,57 @@ function createData() {
     const farmerId1 = `farmer_${Date.now()}`;
     const farmerId2 = `farmer_${Date.now() + 1}`;
     const farmerId3 = `farmer_${Date.now() + 2}`;
-    const productId1 = `product_${Date.now() }`;
-    const productId2 = `product_${Date.now() + 1}`;
-    const productId3 = `product_${Date.now() + 2}`;
-    const productId4 = `product_${Date.now() + 3}`;
-    const productId5 = `product_${Date.now() + 4}`;
-    farmers[farmerId1] = {
-        farmerId: farmerId1,
-        name: "Ali Çağlar Koçer",          // Farmer'ın adı
-        location: "İstanbul",      // Konumu
-        email: "alicaglarkocer@example.com", // E-posta adresi
-        phone: "5521791303",        // Telefon numarası
-        productIds: [productId1, productId2, productId3]
-    };
+    const productNames = [
+        "Fresh Blueberries",
+        "Frozen Blueberries",
+        "Organic Blueberries",
+        "Dried Blueberries",
+        "Canned Blueberries",
+        "Blueberry Powder",
+        "Blueberry Jam",
+        "Freeze-Dried Blueberries",
+        "Blueberry Juice",
+        "Wild Blueberries",
+        "Blueberry Sorbet",
+        "Candied Blueberries"
+    ];
 
-    farmers[farmerId2] = {
-        farmerId: farmerId2,
-        name: "Buket Kaplaner",          // Farmer'ın adı
-        location: "İstanbul",      // Konumu
-        email: "buketkaplaner@example.com", // E-posta adresi
-        phone: "5511050729",        // Telefon numarası
-        productIds: [productId4]
-    };
+    let productIdCounter = 1; // Ürün ID'si için sayaç
 
-    farmers[farmerId3] = {
-        farmerId: farmerId3,
-        name: "Mehmet Koçer",          // Farmer'ın adı
-        location: "İstanbul",      // Konumu
-        email: "mehmetkocer@example.com", // E-posta adresi
-        phone: "5307215273",        // Telefon numarası
-        productIds: [productId5]
-    };
+    // Farmer bilgileri
+    const farmerIds = [farmerId1, farmerId2, farmerId3];
+    farmerIds.forEach((farmerId, farmerIndex) => {
+        const farmerProducts = [];
+        productNames.forEach((productName) => {
+            const productId = `product_${productIdCounter++}`; // Her ürün için benzersiz ID
+            const weight = Math.floor(Math.random() * 3000) + 500; // 500-3500 arasında rastgele ağırlık
+            const price = Math.floor(Math.random() * 100) + 50; // 50-150 arasında rastgele fiyat
 
-    products[productId1] = {
-        productId: productId1,
-        farmerId: farmerId1,
-        productName: "Blueberry",  
-        weight: 2000,               
-        price: 60,                 
-        totalPrice: 2000 * 60       
-    };
+            // Ürün oluştur ve products nesnesine ekle
+            products[productId] = {
+                productId: productId,
+                farmerId: farmerId,
+                productName: productName,
+                weight: weight,
+                price: price,
+                totalPrice: weight * price
+            };
 
-    products[productId2] = {
-        productId: productId2,
-        farmerId: farmerId1,
-        productName: "Banana",  
-        weight: 5000,               
-        price: 400,                 
-        totalPrice: 5000 * 40       
-    };
+            farmerProducts.push(productId); // Farmer'ın ürün listesine ekle
+        });
 
-    products[productId3] = {
-        productId: productId3,
-        farmerId: farmerId1,
-        productName: "Apple",  
-        weight: 1500,               
-        price: 30,                 
-        totalPrice: 1500 * 30       
-    };
+        // Farmer oluştur ve farmers nesnesine ekle
+        farmers[farmerId] = {
+            farmerId: farmerId,
+            name: `Farmer ${farmerIndex + 1}`, // Çiftçi adı
+            location: "İstanbul",
+            email: `farmer${farmerIndex + 1}@example.com`,
+            phone: `55555555${farmerIndex + 1}`,
+            productIds: farmerProducts // Tüm ürün ID'lerini ekle
+        };
+    });
 
-    products[productId4] = {
-        productId: productId4,
-        farmerId: farmerId2,
-        productName: "Blueberry",  
-        weight: 1000,               
-        price: 40,                 
-        totalPrice: 1000 * 40       
-    };
-
-    products[productId5] = {
-        productId: productId5,
-        farmerId: farmerId3,
-        productName: "Blueberry",  
-        weight: 3000,               
-        price: 50,                 
-        totalPrice: 3000 * 50       
-    };
 
     saveDataToLocalStorage();
 }
+

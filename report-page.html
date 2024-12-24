@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Page</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="report.js" defer></script>
+</head>
+<body class="report-page">
+    <header>
+        <h1>Report Page</h1>
+        <nav>
+            <ul>
+                <li><a href="home-page.html">Ana Sayfa</a></li>
+                <li><a href="farmer-page.html">Farmer Page</a></li>
+                <li><a href="purchase-page.html">Purchase Page</a></li>
+                <li><a href="inventory-page.html">Inventory Page</a></li>
+                <li><a href="sale-page.html">Sale Page</a></li>
+                <li><a href="buy-page.html">Buy Page</a></li>
+                <li><a href="report-page.html">Report Page</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Arama / filtreleme türü seçme bölümü -->
+        <div id="search-type-container">
+            <label>
+            <input type="radio" name="search-type" value="type1" checked />
+            Type 1
+            </label>
+            <label>
+            <input type="radio" name="search-type" value="type2" />
+            Type 2
+            </label>
+        </div>
+
+        <!-- Type 1 Bölümü -->
+        <section id="report-filters-type1">
+            <h2>Generate Reports</h2>
+            <form id="filter-form-type1">
+            <div>
+                <label for="year-select">Year:</label>
+                <select id="year-select">
+                <option value="all-years">All Years</option>
+                </select>
+            </div>
+            <div>
+                <label for="month-select">Month:</label>
+                <select id="month-select">
+                <option value="all-months">All Months</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <!-- diğer aylar... -->
+                </select>
+            </div>
+            <div>
+                <label for="day-select">Day:</label>
+                <select id="day-select">
+                <option value="all-days">All Days</option>
+                <!-- Gün seçenekleri... -->
+                </select>
+            </div>
+            <button type="button" id="generate-report-type1">Generate Report</button>
+            </form>
+        </section>
+
+        <!-- Type 2 Bölümü -->
+        <section id="report-filters-type2" style="display: none;">
+            <h2>Generate Reports</h2>
+            <form id="filter-form-type2">
+            <label for="time-period">Select Time Period:</label>
+            <select id="time-period">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+                <option value="all-time">All Time</option>
+            </select>
+            <button type="button" id="generate-report-type2">Generate Report</button>
+            </form>
+        </section>
+
+
+        <section id="inventory-report-results" class="report-section">
+            <h2>Inventory Report Summary</h2>
+            <table id="inventory-report-table" class="report-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Total Weight</th>
+                        <th>Average Price</th>
+                        <th>Total Cost</th>
+                        <th>Packaged Weight</th>
+                        <th>Unpackaged Weight</th>
+                        <th>OnSale Weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="purchases-report-results" class="report-section">
+            <h2>Purchases Report Summary</h2>
+            <table id="purchases-report-table" class="report-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Farmer Name</th>
+                        <th>Date</th>
+                        <th>Total Weight</th>
+                        <th>Price of 1 Kg</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="orders-report-results" class="report-section">
+            <h2>Orders Report Summary</h2>
+            <table id="orders-report-table" class="report-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Date</th>
+                        <th>Total Weight</th>
+                        <th>Price of 1 Kg</th>
+                        <th>Total Price</th>
+                        <th>VAT Amount</th>
+                        <th>Total Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="total-report-results" class="report-section">
+            <h2>Total Report Summary</h2>
+            <table id="total-report-table" class="report-table">
+                <thead>
+                    <tr>
+                        <th>Total Sold Products</th>
+                        <th>Total Weight</th>
+                        <th>Average Purchase Cost</th>
+                        <th>Average Selling Price</th>
+                        <th>Total Purchase Cost</th>
+                        <th>Total Sales Revenue</th>
+                        <th>Total VAT Amount</th>
+                        <th>Total Profit and Profit Margin</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </section>
+        
+    </main>
+</body>
+</html>

@@ -1,67 +1,52 @@
-/* Genel Stil */
-body {
+/* ===============================
+   GENEL STİL
+   =============================== */
+
+   body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     background-color: #f9f9f9;
-}
-
-header {
+  }
+  
+  header {
     background-color: #4CAF50;
     color: white;
     padding: 1rem 0;
     text-align: center;
-}
-
-header h1 {
+  }
+  
+  header h1 {
     margin: 0;
     font-size: 2rem;
-}
-
-main {
+  }
+  
+  main {
     margin: 2rem auto;
-    width: 90%;
-    max-width: 1000px;
+    width: 108%;         /* 90% -> %20 artış = 108% */
+    max-width: 1200px;   /* 1000px -> %20 artış = 1200px */
     background: #fff;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* İşaret Stili */
-.sortable {
-    position: relative;
-    padding-right: 20px;
-}
-
-/* Başlangıç durumu: düz çizgi */
-.sortable::after {
-    content: '\2014'; /* Düz çizgi (―) */
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.8rem;
-    color: gray;
-    cursor: pointer;
-}
-
-/* Sıralama yapılmışsa yukarı ok */
-.sortable.sorted-asc::after {
-    content: '\25B2'; /* Yukarı ok (▲) */
-    color: black;
-}
-
-/* Sıralama yapılmışsa aşağı ok */
-.sortable.sorted-desc::after {
-    content: '\25BC'; /* Aşağı ok (▼) */
-    color: black;
-}
-
-
-/* Navigation Bar Stil */
-nav ul {
+  }
+  
+  
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 2rem;
+    border-top: 1px solid #ddd;
+  }
+  
+  /* ===============================
+     NAVIGATION BAR
+     =============================== */
+  
+  nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -69,27 +54,31 @@ nav ul {
     justify-content: center;
     gap: 1rem;
     background-color: #45a049;
-}
-
-nav ul li {
+  }
+  
+  nav ul li {
     display: inline-block;
-}
-
-nav ul li a {
+  }
+  
+  nav ul li a {
     text-decoration: none;
     color: white;
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
+  }
+  
+  nav ul li a:hover {
     background-color: #0d0733;
-}
-
-/* Select button */
-button.select-btn {
+  }
+  
+  /* ===============================
+     DÜĞME (BUTTON) STİLLERİ
+     =============================== */
+  
+  /* Select Button */
+  button.select-btn {
     padding: 0.5rem 1rem;
     background-color: #4CAF50;
     color: white;
@@ -98,13 +87,14 @@ button.select-btn {
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s ease;
-}
-
-button.select-btn:hover {
+  }
+  
+  button.select-btn:hover {
     background-color: #45a049;
-}
-
-button.unselect-btn {
+  }
+  
+  /* Unselect Button */
+  button.unselect-btn {
     padding: 0.5rem 1rem;
     background-color: #f44336;
     color: white;
@@ -113,46 +103,168 @@ button.unselect-btn {
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s ease;
-}
-
-button.unselect-btn:hover {
+  }
+  
+  button.unselect-btn:hover {
     background-color: #e53935;
-}
-
-/* Welcome Section */
-.welcome-section {
+  }
+  
+  /* Edit Butonu */
+  button.edit-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  button.edit-btn:hover {
+    background-color: #1e88e5;
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  button.edit-btn:active {
+    background-color: #1565c0;
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Delete Butonu */
+  button.delete-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  button.delete-btn:hover {
+    background-color: #e53935;
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  button.delete-btn:active {
+    background-color: #c62828;
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Alert Btn */
+  button.alert-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  button.alert-btn:hover {
+    background-color: #43a047;
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  button.alert-btn:active {
+    background-color: #388e3c;
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Search / Save / Cancel Buttons */
+  .save-btn,
+  #search-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-btn:hover,
+  #search-btn:hover {
+    background-color: #218838;
+  }
+  
+  .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  .save-btn,
+  .cancel-btn {
+    margin-right: 10px;
+  }
+  
+  /* ===============================
+     WELCOME SECTION
+     =============================== */
+  
+  .welcome-section {
     text-align: center;
     margin-bottom: 2rem;
-}
-
-.welcome-section h2 {
+  }
+  
+  .welcome-section h2 {
     color: #4CAF50;
     margin-bottom: 1rem;
-}
-
-.welcome-section p {
+  }
+  
+  .welcome-section p {
     color: #333;
     font-size: 1rem;
-}
-
-/* Feature Cards Section */
-.feature-section {
+  }
+  
+  /* ===============================
+     FEATURE CARDS SECTION
+     =============================== */
+  
+  .feature-section {
     margin-top: 2rem;
-}
-
-.feature-section h2 {
+  }
+  
+  .feature-section h2 {
     text-align: center;
     color: #4CAF50;
     margin-bottom: 2rem;
-}
-
-.feature-cards {
+  }
+  
+  .feature-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
-}
-
-.card {
+  }
+  
+  .card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -160,24 +272,24 @@ button.unselect-btn:hover {
     padding: 1.5rem;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
+  }
+  
+  .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.card h3 {
+  }
+  
+  .card h3 {
     color: #4CAF50;
     margin-bottom: 1rem;
-}
-
-.card p {
+  }
+  
+  .card p {
     color: #333;
     margin-bottom: 1rem;
-}
-
-.card a.btn {
+  }
+  
+  .card a.btn {
     display: inline-block;
     text-decoration: none;
     color: white;
@@ -185,62 +297,92 @@ button.unselect-btn:hover {
     padding: 0.75rem 1.5rem;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-}
-
-.card a.btn:hover {
+  }
+  
+  .card a.btn:hover {
     background-color: #3e8e41;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 1rem 0;
-    background-color: #4CAF50;
-    color: white;
-    margin-top: 2rem;
-    border-top: 1px solid #ddd;
-}
-
-/* Add Farmer Bölümü */
-#add-farmer, #add-product {
+  }
+  
+  /* ===============================
+     İŞARET STİLİ (SIRALAMA İÇİN)
+     =============================== */
+  
+  .sortable {
+    position: relative;
+    padding-right: 20px;
+  }
+  
+  .sortable::after {
+    content: '\2014'; /* Düz çizgi (―) */
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: gray;
+    cursor: pointer;
+  }
+  
+  .sortable.sorted-asc::after {
+    content: '\25B2'; /* Yukarı ok (▲) */
+    color: black;
+  }
+  
+  .sortable.sorted-desc::after {
+    content: '\25BC'; /* Aşağı ok (▼) */
+    color: black;
+  }
+  
+  /* ===============================
+     ADD FARMER & ADD PRODUCT
+     =============================== */
+  
+  #add-farmer,
+  #add-product {
     text-align: left;
-}
-
-#add-farmer h2, #add-product h2 {
+  }
+  
+  #add-farmer h2,
+  #add-product h2 {
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
-}
-
-#add-farmer form, #add-product form {
+  }
+  
+  #add-farmer form,
+  #add-product form {
     width: 100%;
-}
-
-#add-farmer label, #add-product label {
+  }
+  
+  #add-farmer label,
+  #add-product label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
-}
-
-#add-farmer input, #add-product input {
-    width: 100%; /* Genişliği %100 yapar */
+  }
+  
+  #add-farmer input,
+  #add-product input {
+    width: 100%;
     margin-bottom: 1rem;
-    padding: 0.75rem; /* İç boşluk */
+    padding: 0.75rem;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
-
-#add-farmer input:focus, #add-product input:focus {
+  }
+  
+  #add-farmer input:focus,
+  #add-product input:focus {
     border-color: #4CAF50;
     outline: none;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-#add-farmer button, #add-product button {
+  }
+  
+  #add-farmer button,
+  #add-product button {
     display: block;
-    width: 100%; /* Genişliği tam genişlik yapar */
+    width: 100%;
     padding: 0.75rem;
     background-color: #4CAF50;
     color: white;
@@ -249,31 +391,44 @@ footer {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-#add-farmer button:hover, #add-product button:hover {
+  }
+  
+  #add-farmer button:hover,
+  #add-product button:hover {
     background-color: #45a049;
-}
-
-
-/* List Farmers Bölümü */
-#list-farmers, #list-products, #list-purchases, #filter-purchases, #packaging-products{
+  }
+  
+  /* ===============================
+     LİST FARMERS / PRODUCTS / PURCHASES
+     =============================== */
+  
+  #list-farmers,
+  #list-products,
+  #list-purchases,
+  #filter-purchases,
+  #packaging-products {
     margin-top: 2rem;
     text-align: left;
-}
-
-#list-farmers h2, #list-products h2, #list-purchases h2, #filter-purchases h2, #packaging-products h2{
+  }
+  
+  #list-farmers h2,
+  #list-products h2,
+  #list-purchases h2,
+  #filter-purchases h2,
+  #packaging-products h2 {
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
-}
-
-#list-farmers-btn, #list-products-btn, #list-purchases-btn {
+  }
+  
+  #list-farmers-btn,
+  #list-products-btn,
+  #list-purchases-btn {
     background-color: #4CAF50;
     color: white;
     margin-top: 1rem;
     display: block;
-    width: 100%; /* Genişliği tam genişlik yapar */
+    width: 100%;
     text-align: center;
     padding: 0.75rem 1.5rem;
     border: none;
@@ -281,163 +436,101 @@ footer {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-#list-farmers-btn:hover, #list-products-btn:hover, #list-purchases-btn:hover{
+  }
+  
+  #list-farmers-btn:hover,
+  #list-products-btn:hover,
+  #list-purchases-btn:hover {
     background-color: #45a049;
-}
-
-/* Tablo Stilleri */
-table {
+  }
+  
+  /* ===============================
+     TABLO STİLLERİ
+     =============================== */
+  
+  table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
     background: white;
-}
-
-table th, table td {
+  }
+  
+  table th,
+  table td {
     text-align: center;
     padding: 0.75rem;
     border: 1px solid #ddd;
-    cursor: default;      /* Fare imlecini varsayılan hale getir */
-    user-select: none;    /* Yazıyı seçmeyi devre dışı bırak */
-    outline: none;        /* Odaklanma kenarlığını kaldır */
-}
-
-table td input {
-    width: 90%; /* Hücre genişliğine göre uyumlu olacak şekilde ayarla */
+    cursor: default;
+    user-select: none;
+    outline: none;
+  }
+  
+  table td input {
+    width: 90%;
     max-width: 95%;
-    box-sizing: border-box; /* Padding ve border genişliği dahil */
-    padding: 5px; /* İç boşluk ekle */
-    font-size: 1rem; /* Yazı boyutunu tabloyla eşleştir */
-}
-
-table th {
+    box-sizing: border-box;
+    padding: 5px;
+    font-size: 1rem;
+  }
+  
+  table th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
-
-table tbody tr:nth-child(even) {
+  }
+  
+  table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-}
-
-table tbody tr:hover {
+  }
+  
+  table tbody tr:hover {
     background-color: #f1f1f1;
-}
-
-/* Edit Butonu */
-button.edit-btn {
-    background-color: #2196F3; /* Yumuşak bir mavi tonu */
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 8px; /* Hafif yuvarlak köşeler */
-    font-size: 1rem;
-    font-weight: bold; /* Daha belirgin yazı */
-    cursor: pointer;
-    transition: all 0.3s ease, transform 0.2s ease; /* Geçiş efektleri */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-}
-
-button.edit-btn:hover {
-    background-color: #1e88e5; /* Daha koyu mavi hover tonu */
-    transform: scale(1.05); /* Hover sırasında hafif büyütme */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Daha belirgin bir gölge */
-}
-
-button.edit-btn:active {
-    background-color: #1565c0; /* Daha koyu bir ton tıklama için */
-    transform: scale(0.98); /* Tıklama sırasında hafif küçültme */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Daha düşük gölge */
-}
-
-/* Delete Butonu */
-button.delete-btn {
-    background-color: #f44336; /* Yumuşak bir kırmızı tonu */
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 8px; /* Hafif yuvarlak köşeler */
-    font-size: 1rem;
-    font-weight: bold; /* Daha belirgin yazı */
-    cursor: pointer;
-    transition: all 0.3s ease, transform 0.2s ease; /* Geçiş efektleri */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-}
-
-button.delete-btn:hover {
-    background-color: #e53935; /* Daha koyu kırmızı hover tonu */
-    transform: scale(1.05); /* Hover sırasında hafif büyütme */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Daha belirgin bir gölge */
-}
-
-button.delete-btn:active {
-    background-color: #c62828; /* Daha koyu bir ton tıklama için */
-    transform: scale(0.98); /* Tıklama sırasında hafif küçültme */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Daha düşük gölge */
-}
-
-
-/* Alert Btn */
-button.alert-btn {
-    background-color: #4caf50; /* Daha yumuşak bir yeşil tonu */
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 8px; /* Hafif yuvarlak köşeler */
-    font-size: 0.9rem;
-    font-weight: bold; /* Daha belirgin yazı */
-    cursor: pointer;
-    transition: all 0.3s ease, transform 0.2s ease; /* Geçiş efektleri */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-}
-
-button.alert-btn:hover {
-    background-color: #43a047; /* Daha koyu bir yeşil hover tonu */
-    transform: scale(1.05); /* Hover sırasında hafif büyütme */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Daha belirgin bir gölge */
-}
-
-button.alert-btn:active {
-    background-color: #388e3c; /* Daha koyu bir ton tıklama için */
-    transform: scale(0.98); /* Tıklama sırasında hafif küçültme */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Daha düşük gölge */
-}
-
-/* Responsive Tasarım */
-@media (max-width: 600px) {
+  }
+  
+  /* ===============================
+     RESPONSIVE TASARIM
+     =============================== */
+  
+  @media (max-width: 600px) {
     main {
-        padding: 1rem;
+      padding: 1rem;
     }
-
-    table, table th, table td {
-        font-size: 0.9rem;
+  
+    table,
+    table th,
+    table td {
+      font-size: 0.9rem;
     }
-
+  
     form {
-        gap: 0.5rem;
+      gap: 0.5rem;
     }
-
+  
     form button {
-        padding: 0.5rem;
-        font-size: 0.9rem;
+      padding: 0.5rem;
+      font-size: 0.9rem;
     }
-}
-
-
-/* Search Products Bölümü */
-#search-product, #search-farmer {
+  }
+  
+  /* ===============================
+     SEARCH PRODUCTS / FARMER
+     =============================== */
+  
+  #search-product,
+  #search-farmer {
     margin-top: 2rem;
     text-align: left;
-}
-
-#search-product h2, #search-farmer h2 {
+  }
+  
+  #search-product h2,
+  #search-farmer h2 {
     margin-bottom: 1rem;
     color: #4CAF50;
     text-align: center;
-}
-
-#search-product-btn, #search-farmer-btn, #show-results-btn {
+  }
+  
+  #search-product-btn,
+  #search-farmer-btn,
+  #show-results-btn {
     background-color: #4CAF50;
     color: white;
     display: block;
@@ -447,118 +540,140 @@ button.alert-btn:active {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin: 1rem auto; /* Butonu yatay olarak ortalar */
-}
-
-#search-product-btn:hover, #search-farmer-btn:hover, #show-results-btn:hover{
+    margin: 1rem auto;
+  }
+  
+  #search-product-btn:hover,
+  #search-farmer-btn:hover,
+  #show-results-btn:hover {
     background-color: #45a049;
-}
-
-#search-type, #search-value {
+  }
+  
+  #search-type,
+  #search-value {
     padding: 0.75rem;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin: 0.5rem 0; /* Aralarına boşluk ekler */
-    width: 100%; /* Responsive için tam genişlik sağlar */
-    max-width: 300px; /* Genişliği sınırlamak için */
-}
-
-#search-results-table {
+    margin: 0.5rem 0;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  #search-results-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
-}
-
-#search-results-table th, #search-results-table td {
+  }
+  
+  #search-results-table th,
+  #search-results-table td {
     border: 1px solid #ccc;
     padding: 0.75rem;
     text-align: center;
-}
-
-#search-results-table th {
+  }
+  
+  #search-results-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
-
-#search-results-table tbody tr:nth-child(even) {
+  }
+  
+  #search-results-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-}
-
-#search-results-table tbody tr:hover {
+  }
+  
+  #search-results-table tbody tr:hover {
     background-color: #f1f1f1;
-}
-
-/* Dropdown */
-#product-name-dropdown {
+  }
+  
+  /* ===============================
+     DROPDOWN
+     =============================== */
+  
+  #product-name-dropdown {
     flex: 1;
     padding: 0.75rem;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-left: 1rem;
-}
-
-/* Tablo Stilleri */
-#products-table {
+  }
+  
+  /* ===============================
+     PRODUCTS TABLE (GİZLİ BAŞLANGIÇ)
+     =============================== */
+  
+  #products-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
     background: white;
-    display: none; /* İlk başta görünmez */
-}
-
-#products-table th, #products-table td {
+    display: none;
+  }
+  
+  #products-table th,
+  #products-table td {
     text-align: center;
     padding: 0.75rem;
     border: 1px solid #ddd;
-}
-
-#products-table th {
+  }
+  
+  #products-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
-
-#products-table tbody tr:nth-child(even) {
+  }
+  
+  #products-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-}
-
-#products-table tbody tr:hover {
+  }
+  
+  #products-table tbody tr:hover {
     background-color: #f1f1f1;
-}
-
-/* General Container Styling */
-#sell-products {
+  }
+  
+  /* ===============================
+     SELL PRODUCTS
+     =============================== */
+  
+  #sell-products {
     margin: 2rem auto;
     padding: 2rem;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 700px; /* Daha geniş görünüm */
-}
-
-#sell-products h2 {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+  }
+  
+  #sell-products h2 {
     text-align: center;
     color: #333;
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
     font-weight: bold;
-}
-
-/* Product Selector Section */
-.product-selector-container {
-    margin-bottom: 1.5rem;
-}
-
-.product-selector-container label {
+  }
+  
+  .product-selector-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .product-selector-container label {
     font-size: 1rem;
     font-weight: bold;
     color: #555;
     margin-bottom: 0.5rem;
     display: block;
-}
-
-.product-selector-container select {
+  }
+  
+  .product-selector-container select {
     width: 100%;
     padding: 0.75rem 1rem;
     font-size: 1rem;
@@ -567,53 +682,70 @@ button.alert-btn:active {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-selector-container select:focus {
+  }
+  
+  .product-selector-container select:focus {
     outline: none;
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-/* Sell Product Row - Sabit Hiza */
-.sell-product-row {
+  }
+  
+  #product-selector {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #28a745;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .product-selector-container label {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  /* ===============================
+     SELL PRODUCT ROW
+     =============================== */
+  
+  .sell-product-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; /* Sabit kolon genişlikleri */
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
     align-items: center;
-    gap: 0.5rem; /* Kolonlar arası boşluk */
+    gap: 0.5rem;
     padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 0.75rem;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.sell-product-row:hover {
+  }
+  
+  .sell-product-row:hover {
     background-color: #f1f1f1;
     transform: translateY(-3px);
-}
-
-/* Product Labels */
-.package-label {
+  }
+  
+  .package-label {
     font-size: 1.1rem;
     font-weight: bold;
     color: #333;
-    min-width: 120px; /* Genişlik azaltıldı */
-    margin-right: 0.5rem; /* Daha az boşluk sağa */
-}
-
-.package-count,
-.sold-count {
+    min-width: 120px;
+    margin-right: 0.5rem;
+  }
+  
+  .package-count,
+  .sold-count {
     font-size: 0.9rem;
     color: #555;
     text-align: center;
-    margin: 0; /* Ekstra boşluk kaldırıldı */
-    min-width: 80px; /* Daha dar genişlik */
-}
-
-/* Input Fields */
-.count-input, .price-input {
+    margin: 0;
+    min-width: 80px;
+  }
+  
+  .count-input,
+  .price-input {
     padding: 0.6rem 0.8rem;
     font-size: 1rem;
     border: 1px solid #ccc;
@@ -622,25 +754,24 @@ button.alert-btn:active {
     text-align: center;
     box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.count-input:focus, .price-input:focus {
+  }
+  
+  .count-input:focus,
+  .price-input:focus {
     border-color: #4CAF50;
     outline: none;
     box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
-}
-
-/* Checkbox Styling */
-.select-checkbox {
+  }
+  
+  .select-checkbox {
     width: 1.5rem;
     height: 1.5rem;
     accent-color: #4CAF50;
     cursor: pointer;
     flex-shrink: 0;
-}
-
-/* Save Button */
-#save-sell-btn {
+  }
+  
+  #save-sell-btn {
     display: block;
     margin: 1.5rem auto 0;
     padding: 0.75rem 1.5rem;
@@ -653,79 +784,86 @@ button.alert-btn:active {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#save-sell-btn:hover {
+  }
+  
+  #save-sell-btn:hover {
     background-color: #45a049;
     transform: scale(1.05);
-}
-
-#save-sell-btn:active {
+  }
+  
+  #save-sell-btn:active {
     background-color: #388e3c;
     transform: scale(0.98);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
+  }
+  
+  /* ===============================
+     RESPONSIVE DESIGN (SELL PRODUCT ROW)
+     =============================== */
+  
+  @media (max-width: 768px) {
     .sell-product-row {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 0.75rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.75rem;
     }
-
+  
     .package-label,
     .package-count,
     .sold-count,
     .count-input {
-        text-align: center;
-        width: 100%;
+      text-align: center;
+      width: 100%;
     }
-
+  
     #save-sell-btn {
-        width: 100%;
+      width: 100%;
     }
-}
-
-/* Main Container Styling */
-#product-cards-container {
+  }
+  
+  /* ===============================
+     PRODUCT CARDS CONTAINER
+     =============================== */
+  
+  #product-cards-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-}
-
-/* Product Section */
-.product-section {
+  }
+  
+  .product-section {
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
     padding: 15px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.product-header {
+  }
+  
+  .count-input {
+    align-self: center;
+  }
+  
+  .product-header {
     font-size: 24px;
     margin-bottom: 15px;
     color: #333;
     text-align: center;
-}
-
-/* Package Container */
-.package-container {
+  }
+  
+  .package-container {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     justify-content: center;
-}
-
-/* Product Card */
-.product-card {
+  }
+  
+  .product-card {
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fff;
     padding: 15px;
     width: 250px;
-    height: 450px; /* Sabit bir yükseklik ekleniyor */
+    height: 450px; /* Sabit yükseklik */
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
@@ -733,88 +871,499 @@ button.alert-btn:active {
     justify-content: space-between;
     align-items: center;
     transition: transform 0.2s ease-in-out;
-}
-
-.product-card:hover {
+  }
+  
+  .product-card:hover {
     transform: scale(1.05);
-}
-
-/* Product Image */
-.product-image {
+  }
+  
+  .product-image {
     width: 100%;
-    height: 150px; /* Sabit bir yükseklik */
-    object-fit: cover; /* Resmin kart içinde düzgün görünmesi sağlanır */
+    height: 150px;
+    object-fit: cover;
     border-radius: 8px;
     margin-bottom: 10px;
-}
-
-/* Product Details */
-.product-details {
+  }
+  
+  .product-details {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    width: 100%; /* Detayların genişliği kartın genişliğiyle uyumlu olacak */
-}
-
-.product-title {
+    width: 100%;
+  }
+  
+  .product-title {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-}
-
-.product-count,
-.product-price {
+  }
+  
+  .product-count,
+  .product-price {
     font-size: 14px;
     color: #555;
-    margin: 0; /* Paragrafların ekstra boşluk bırakmasını engeller */
+    margin: 0;
     text-align: center;
-    padding: 10px; /* İçerik için biraz boşluk */
-    background-color: #f9f9f9; /* Hafif bir arka plan rengi */
-    border-radius: 5px; /* Köşeleri yuvarlat */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* İnce gölge */
-}
-.editable {
-    border: 2px dashed #08cd16; /* Kesik mavi kenarlık */
-    border-radius: 5px; /* Köşeleri yuvarlat */
-    padding: 5px; /* İçerik için boşluk */
-    background-color: #eaf4fc; /* Hafif mavi arka plan */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-    transition: all 0.3s ease; /* Yumuşak animasyon */
-}
-
-.editable:focus {
-    outline: none; /* Varsayılan çerçeveyi kaldır */
-    border-color: #08cd16; /* Daha koyu mavi kenarlık */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Daha belirgin gölge */
-}
-
-/* Buttons */
-.edit-button,
-.delete-button {
-    width: 100%; /* Butonlar kartın genişliğini kaplar */
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .editable {
+    border: 2px dashed #08cd16;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #eaf4fc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .editable:focus {
+    outline: none;
+    border-color: #08cd16;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .edit-button,
+  .delete-button,
+  .buy-button {
+    width: 100%;
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
     margin-top: 10px;
-}
-
-.edit-button {
+  }
+  
+  .edit-button {
     background-color: #007bff;
     color: #fff;
     border: none;
-}
-
-.edit-button:hover {
+  }
+  
+  .edit-button:hover {
     background-color: #0056b3;
-}
-
-.delete-button {
+  }
+  
+  .delete-button {
     background-color: #dc3545;
     color: #fff;
     border: none;
-}
-
-.delete-button:hover {
+  }
+  
+  .delete-button:hover {
     background-color: #b02a37;
-}
+  }
+  
+  .buy-button {
+    background-color: #388e3c;
+    color: #fff;
+    border: none;
+  }
+  
+  .buy-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* ===============================
+     CART CONTAINER
+     =============================== */
+  
+  .cart-container {
+    position: fixed;
+    top: 150px;
+    right: 20px;
+    width: 400px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  
+  .cart-container h2 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    text-align: center;
+    color: #333;
+  }
+  
+  #cart-items {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+  }
+  
+  #cart-items div {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+  }
+  
+  #cart-items div:last-child {
+    border-bottom: none;
+  }
+  
+  #cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+  }
+  
+  #cart-summary p {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  #checkout-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  #checkout-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* ===============================
+     REPORT TABLE
+     =============================== */
+  
+     .report-table {
+        width: 100%;
+        margin-top: 1rem;
+        border-collapse: collapse;
+        background-color: white;
+        text-align: center;
+      }
+      
+      .report-table th,
+      .report-table td {
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+      }
+      
+      .report-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+      
+      .report-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      
+      .report-table tbody tr:hover {
+        background-color: #f1f1f1;
+      }
+  
+  /* ===============================
+     REPORT SECTION
+     =============================== */
+  
+    .report-section {
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;     /* 600px -> 1200px */
+    }
+      
+    .report-section h2 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #4CAF50;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+  
+  /* ===============================
+     RESPONSIVE DESIGN (TABLES)
+     =============================== */
+  
+  @media (max-width: 768px) {
+    .report-table th,
+    .report-table td {
+      font-size: 0.85rem;
+    }
+  }
+  
+  /* ===============================
+     REPORT FILTERS SECTION
+     =============================== */
+  
+  #report-filters {
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+  }
+  
+  #report-filters h2 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  #filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  #filter-form label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+  
+  #time-period {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  #time-period:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }
+  
+  #generate-report {
+    padding: 0.75rem 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  #generate-report:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  #generate-report:active {
+    background-color: #388e3c;
+    transform: scale(0.98);
+  }
+  
+  /* ===============================
+     SEARCH TYPE CONTAINER
+     =============================== */
+ /* ========== TYPE SEÇİMİ (RADYO BUTONLAR) ========== */
+
+#search-type-container {
+    display: flex;              /* Radyo butonlarını yan yana dizer */
+    justify-content: center;    /* Ortaya hizala */
+    align-items: center;        
+    gap: 1rem;                  /* Butonlar arası boşluk */
+    margin-bottom: 1.5rem;      /* Alt kısım boşluk */
+  }
+  
+  /* Radyo butonları görünmez yap */
+  #search-type-container input[type="radio"] {
+    display: none;
+  }
+  
+  /* Label'ları buton görünümüne çevir */
+  #search-type-container label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    border: 2px solid #3f8d42;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;  /* Metin seçimini önlemek isterseniz */
+  }
+  
+  /* Hover efekti */
+  #search-type-container label:hover {
+    background-color: #18521a;
+  }
+  
+  /* Seçili (checked) durumunda görsel değişiklik */
+  #search-type-container input[type="radio"]:checked + label {
+    background-color: #4CAF50;  
+    color: #fff;                
+    border-color: #45a049;      
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+  }
+  
+  /* ========== TYPE 1 VE TYPE 2 BÖLÜMLERİNİN GENEL DÜZENİ ========== */
+  
+  #report-filters-type1,
+  #report-filters-type2 {
+    max-width: 800px;           /* Genişliği artırabilirsiniz */
+    margin: 0 auto 2rem;        /* Ortada ve alt boşluklu */
+    padding: 1.5rem;
+    background-color: #fff;     
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Başlık stil */
+  #report-filters-type1 h2,
+  #report-filters-type2 h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  /* Form düzeni */
+  #filter-form-type1,
+  #filter-form-type2 {
+    display: flex;           
+    justify-content: center; 
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;         /* Dar ekranlarda satır kaydır */
+  }
+  
+  /* Select kutuları */
+  #filter-form-type1 select,
+  #filter-form-type2 select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  #filter-form-type1 select:focus,
+  #filter-form-type2 select:focus {
+    border-color: #4CAF50;
+  }
+  
+  /* Butonlar */
+  #generate-report-type1,
+  #generate-report-type2 {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  #generate-report-type1:hover,
+  #generate-report-type2:hover {
+    background-color: #45a049;
+  }
+  
+  /* ===============================
+     FORM GENEL
+     =============================== */
+  
+  form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  
+  form label {
+    cursor: pointer;
+  }
+  
+  /* Select Box Styles (Genel) */
+  select {
+    width: 150px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    transition: border-color 0.3s ease;
+  }
+  
+  select:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }
+  
+  /* Button Styles (Genel) */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  button:active {
+    background-color: #3e8e41;
+  }
+  
+  /* Section Styles (Genel) */
+  section {
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 1rem auto;
+    max-width: 600px;
+  }
+  
+  @media (max-width: 768px) {
+    form {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    select {
+      width: 100%;
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+  
