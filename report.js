@@ -11,6 +11,8 @@ const totalTableBody = document.querySelector("#total-report-table tbody");
 
 const type1Section = document.getElementById('report-filters-type1');
 const type2Section = document.getElementById('report-filters-type2');
+const btnType1 = document.querySelector('#generate-report-type1');
+const btnType2 = document.querySelector('#generate-report-type2');
 
 
 
@@ -79,6 +81,57 @@ generateReportBtn.addEventListener('click', () => {
 */
 
 
+btnType1.addEventListener('click', () => {
+    let year = document.getElementById("year-select").value;
+    let month = document.getElementById("month-select").value;
+    let day = document.getElementById("day-select").value;
+    let startDate = null;
+    if (year == 'all-years') {
+        year = '1950';
+    }
+    if (month == 'all-months') {
+        month = '01';
+    }
+    if (day == 'all-days') {
+        day = '01';
+    }
+    startDate = year + '-' + month + '-' + day + '_00:00';
+    
+})
+
+btnType2.addEventListener('click', () => {
+    const timePeriod = document.getElementById("time-period").value;
+    
+    const unformattedDate = new Date();
+
+    
+
+    if (timePeriod == 'daily') {
+        unformattedDate.setDate(unformattedDate.getDate() - 1);
+    } else if (timePeriod == 'weekly') {
+        unformattedDate.setDate(unformattedDate.getDate() - 7);
+    } else if (timePeriod == 'monthly') {
+        unformattedDate.setMonth(unformattedDate.getMonth() - 1);
+    } else if (timePeriod == 'yearly') {
+        unformattedDate.setFullYear(unformattedDate.getFullYear() - 1);
+    }else {
+        unformattedDate.setFullYear(unformattedDate.getFullYear() - 100);
+    }
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    
+    // İstenilen formatta birleştir
+    const date = `${year}-${month}-${day}_${hours}:${minutes}`;
+
+    console.log(date);
+
+})
+
 function generateInventoryReport(timePeriod) {
     inventoryTableBody.innerHTML = "";
 }
@@ -91,6 +144,34 @@ function generateOrdersReport(timePeriod) {
 function generateTotalReport(timePeriod) {
     totalTableBody.innerHTML = "";
 }
+
+
+function addDateDropdown() {
+    const years = document.getElementById('year-select');
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear; year >= 1950; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        years.appendChild(option);
+    }
+
+    const days = document.getElementById('day-select');
+    for (let day = 1; day <= 31; day++) {
+    const option = document.createElement('option');
+    option.value = String(day).padStart(2, '0'); // '01', '02' şeklinde formatlar
+    option.textContent = String(day).padStart(2, '0');
+    days.appendChild(option);
+    }
+}
+
+
+
+
+
+
+
+
 
 
 function loadDataFromLocalStorage() {
@@ -141,27 +222,10 @@ document.querySelectorAll('input[name="search-type"]').forEach((radio) => {
       }
     });
   });
+  
 document.addEventListener("DOMContentLoaded", () => {
     loadDataFromLocalStorage();
-
-
-
-    const years = document.getElementById('year-select');
-    const currentYear = new Date().getFullYear();
-    for (let year = currentYear; year >= 2000; year--) {
-        const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
-        years.appendChild(option);
-    }
-
-    const days = document.getElementById('day-select');
-    for (let day = 1; day <= 31; day++) {
-    const option = document.createElement('option');
-    option.value = String(day).padStart(2, '0'); // '01', '02' şeklinde formatlar
-    option.textContent = String(day).padStart(2, '0');
-    days.appendChild(option);
-    }
+    addDateDropdown();
 
 
 
@@ -201,4 +265,3 @@ function addBackdatedPurchase(productName, farmerId, price, weight, backdateDays
     };
 
 }
-
