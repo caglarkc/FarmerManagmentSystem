@@ -85,7 +85,6 @@ btnType1.addEventListener('click', () => {
     let year = document.getElementById("year-select").value;
     let month = document.getElementById("month-select").value;
     let day = document.getElementById("day-select").value;
-    let startDate = null;
     if (year == 'all-years') {
         year = '1950';
     }
@@ -95,7 +94,12 @@ btnType1.addEventListener('click', () => {
     if (day == 'all-days') {
         day = '01';
     }
-    startDate = year + '-' + month + '-' + day + '_00:00';
+    const startDate = year + '-' + month + '-' + day + '_00:00';
+    
+    generateInventoryReport(startDate);
+    generatePurchasesReport(startDate);
+    generateOrdersReport(startDate);
+    generateTotalReport(startDate);
     
 })
 
@@ -104,6 +108,13 @@ btnType2.addEventListener('click', () => {
     
     const unformattedDate = new Date();
 
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    
     
 
     if (timePeriod == 'daily') {
@@ -118,22 +129,20 @@ btnType2.addEventListener('click', () => {
         unformattedDate.setFullYear(unformattedDate.getFullYear() - 100);
     }
 
-    // Yıl, ay, gün, saat ve dakika bilgilerini al
-    const year = unformattedDate.getFullYear();
-    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
-    const day = String(unformattedDate.getDate()).padStart(2, '0');
-    const hours = String(unformattedDate.getHours()).padStart(2, '0');
-    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
-    
     // İstenilen formatta birleştir
-    const date = `${year}-${month}-${day}_${hours}:${minutes}`;
+    const startDate = `${year}-${month}-${day}_${hours}:${minutes}`;
 
-    console.log(date);
+    generateInventoryReport(startDate);
+    generatePurchasesReport(startDate);
+    generateOrdersReport(startDate);
+    generateTotalReport(startDate);
 
 })
 
 function generateInventoryReport(timePeriod) {
     inventoryTableBody.innerHTML = "";
+
+
 }
 function generatePurchasesReport(timePeriod) {
     purchasesTableBody.innerHTML = "";
@@ -226,6 +235,10 @@ document.querySelectorAll('input[name="search-type"]').forEach((radio) => {
 document.addEventListener("DOMContentLoaded", () => {
     loadDataFromLocalStorage();
     addDateDropdown();
+
+    console.log(purchases);
+    console.log(inventory);
+    console.log(onSales);
 
 
 

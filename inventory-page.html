@@ -43,6 +43,31 @@
                 </tbody>
             </table>
         </section>
+
+        <section id="edit-packages" style="margin-top: 2rem;">
+            <h2>Edit Packages</h2>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <!-- Search Value Dropdown -->
+                <select 
+                    id="edit-package-value" 
+                    style="padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                >
+                    <option value="" disabled selected>Select Product</option>
+                </select>
+        
+                <!-- Search Button -->
+                <button 
+                    type="button" 
+                    id="search-edit-package" 
+                    style="padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; float: left;"
+        >
+                    Search
+                </button>
+            </div>
+        
+        
+        </section>
+        
         
         <section id="packaging-products">
             <h2>Packaging Products</h2>
@@ -59,6 +84,28 @@
                 <button 
                 type="button" 
                 id="search-product-btn" 
+                style="display: inline-block; margin-right: 1rem; padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                >
+                Search
+                </button>
+            </div>
+        </section>
+
+        <section id="special-packaging-products">
+            <h2>Special Packaging Products</h2>
+            <div>
+                <!-- Search Value Dropdown -->
+                <select 
+                    id="special-search-value" 
+                    style="display: inline-block; margin-right: 1rem; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"
+                >
+                    <option value="" disabled selected>Select Product</option>
+                </select>
+        
+                <!-- Search Button -->
+                <button 
+                type="button" 
+                id="special-search-product-btn" 
                 style="display: inline-block; margin-right: 1rem; padding: 0.75rem 1.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
                 >
                 Search

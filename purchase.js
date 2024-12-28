@@ -334,13 +334,23 @@ function showProductOnSearchTable(product) {
                 inventory[boughtProductId] = {
                     boughtProductId,
                     productName,
+                    date: {},
+                    location: 'local-storage',
                     weight
                 }
+                inventory[boughtProductId].date[date] = weight;
             }else {
                 for(const boughtProductId in inventory) {
                     const boughtProduct = inventory[boughtProductId];
                     if (product.productName == boughtProduct.productName) {
                         boughtProduct.weight += Number(weight);
+                        // Add or update the weight for the specific date
+                        if (!boughtProduct.date[date]) {
+                            boughtProduct.date[date] = weight;
+                        } else {
+                            // If the date already exists, add the new weight to the existing weight
+                            boughtProduct.date[date] += weight;
+                        }
                     }
                 }
             }
@@ -457,14 +467,14 @@ function sortAndShowPurchases( sortKey , way) {
     // Anahtar (key) türüne göre sıralama yap
     if (sortKey === 'product-name') {
         sortedPurchases = Object.values(purchases).sort((a, b) => {
-            const nameA = a.boughtProduct.productName.toLowerCase();
-            const nameB = b.boughtProduct.productName.toLowerCase();
+            const nameA = a.productName.toLowerCase();
+            const nameB = b.productName.toLowerCase();
             return way === 'up' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
         });
     } else if (sortKey === 'farmer-name') {
         sortedPurchases = Object.values(purchases).sort((a, b) => {
-            const nameA = farmers[a.boughtProduct.farmerId].name.toLowerCase();
-            const nameB = farmers[b.boughtProduct.farmerId].name.toLowerCase();
+            const nameA = farmers[a.farmerId].name.toLowerCase();
+            const nameB = farmers[b.farmerId].name.toLowerCase();
             return way === 'up' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
         });
     } else if (sortKey === 'date') {
@@ -475,20 +485,20 @@ function sortAndShowPurchases( sortKey , way) {
         });
     } else if (sortKey === 'weight') {
         sortedPurchases = Object.values(purchases).sort((a, b) => {
-            const weightA = a.boughtProduct.weight;
-            const weightB = b.boughtProduct.weight;
+            const weightA = a.weight;
+            const weightB = b.weight;
             return way === 'up' ? weightA - weightB : weightB - weightA;
         });
     } else if (sortKey === 'price') {
         sortedPurchases = Object.values(purchases).sort((a, b) => {
-            const priceA = a.boughtProduct.price;
-            const priceB = b.boughtProduct.price;
+            const priceA = a.price;
+            const priceB = b.price;
             return way === 'up' ? priceA - priceB : priceB - priceA;
         });
     } else if (sortKey === 'total-price') {
         sortedPurchases = Object.values(purchases).sort((a, b) => {
-            const priceA = a.boughtProduct.totalPrice;
-            const priceB = b.boughtProduct.totalPrice;
+            const priceA = a.totalPrice;
+            const priceB = b.totalPrice;
             return way === 'up' ? priceA - priceB : priceB - priceA;
         });
     }

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     populateProductSelector();
     renderProductCards();
     
-    /*
+    
     console.log('FARMERS');
     console.log(farmers);
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('PRUCHASES');
     console.log(purchases);
-*/
+
     console.log('İNVENTORY');
     console.log(inventory);
     
@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Dropdown'u doldur
 function populateProductSelector() {
     const selector = document.getElementById('product-selector');
+    selector.innerHTML = "";
     selector.innerHTML = '<option value="" disabled selected>Select a product</option>';
 
     for (const productId in inventory) {
@@ -298,7 +299,6 @@ saveSellBtn.addEventListener('click', () => {
                     const packages = onSale.packages;
                     for (const type in packages) {
                         if (productName == product.productName  && type == item.packageType) {
-                            console.log("burada");
                             isUpdatedOnSale = true;
                             onSale.packages[type].count += Number(count);
                             break;
@@ -323,7 +323,6 @@ saveSellBtn.addEventListener('click', () => {
                         price
                     };
                 }else {
-                    console.log(isUpdatedOnSale);
                 }
                 
                 counter += 1;
@@ -334,7 +333,8 @@ saveSellBtn.addEventListener('click', () => {
             document.getElementById('sell-products-container').innerHTML = "";
             renderProductCards();
             alert('Başarı ile paketlendi ürünler...');
-    
+            populateProductSelector();
+        
             
         }else {
             alert("HATA ALINDI");
