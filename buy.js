@@ -4,6 +4,7 @@ const purchases = {};
 const inventory = {};
 const onSales = {};
 const orders = {};
+const logs = {};
 
 const buyBadgetBtn = document.querySelector('#checkout-button');
 const searchBtn = document.querySelector('#search-btn');
@@ -13,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDataFromLocalStorage();
     renderProductCards();
     populateProductSelector();
-    
+    //localStorage.removeItem('logs');
+    console.log(logs);
     /*
     console.log('FARMERS');
     console.log(farmers);
@@ -49,6 +51,7 @@ function loadDataFromLocalStorage() {
     loadInventoryFromLocalStorage();
     loadOnSalesFromLocalStorage();
     loadOrdersFromLocalStorage();
+    loadLogsFromLocalStorage();
 }
 function saveDataToLocalStorage() {
     saveProductsToLocalStorage();
@@ -57,6 +60,31 @@ function saveDataToLocalStorage() {
     saveInventoryToLocalStorage();
     saveOnSalesToLocalStorage();
     saveOrdersToLocalStorage();
+    saveLogsToLocalStorage();
+}
+function returnCurrentDate() {
+    const unformattedDate = new Date();
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    const seconds = String(unformattedDate.getSeconds()).padStart(2, '0'); // Saniye bilgisi
+
+    const startDate = `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`;
+
+    return startDate;
+}
+function saveLogsToLocalStorage() {
+    localStorage.setItem('logs', JSON.stringify(logs));
+}
+function loadLogsFromLocalStorage() {
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+        Object.assign(logs, JSON.parse(storedLogs));
+    }
 }
 function saveInventoryToLocalStorage() {
     localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -312,33 +340,43 @@ buyBadgetBtn.addEventListener('click', () => {
     const date = `${year}-${month}-${day}_${hours}:${minutes}`;
 
     const orderId = `order_${Date.now()}`;
-    const boughts = {};
-    let i = 0;
-    let w = 0;
-    let p = 0;
-    cart.forEach((item) => {
-        boughts[i] = {
-            productName: item.productName,
-            count: item.count,
-            price: item.price,
-            packageWeight: item.packageWeight
-        };
-        i += Number(1);
-        w += Number(item.count) * Number(item.packageWeight);
-        p += Number(item.price) * Number(item.count);
-    })
-    orders[orderId] = {
-        orderId: orderId,
-        date: date,
-        boughts,
-        totalWeight: w,
-        totalPrice: p
+
+    if (cart && cart.length > 0) {
+        const boughts = {};
+        let i = 0;
+        let w = 0;
+        let p = 0;
+        cart.forEach((item) => {
+            boughts[i] = {
+                productName: item.productName,
+                count: item.count,
+                price: item.price,
+                packageWeight: item.packageWeight
+            };
+            i += Number(1);
+            w += Number(item.count) * Number(item.packageWeight);
+            p += Number(item.price) * Number(item.count);
+        })
+        orders[orderId] = {
+            orderId: orderId,
+            date: date,
+            boughts,
+            totalWeight: w,
+            totalPrice: p
+        }
+        logs[returnCurrentDate()] = {
+            type:'order',
+            date: returnCurrentDate(),
+            orderId
+        }
+        saveDataToLocalStorage();
+        cart.length = 0; // Sepeti boşaltır
+        renderProductCards();
+        renderCart();  
+    }else {
+        alert('Sepet boş...');
     }
-    console.log(orders);
-    saveDataToLocalStorage();
-    cart.length = 0; // Sepeti boşaltır
-    renderProductCards();
-    renderCart();  
+    
 })
 
 // Dropdown'u doldur
@@ -390,7 +428,7 @@ document.querySelector('#product-selector').addEventListener('change', () => {
             row.innerHTML = `
                 <td>${packageData.type}</td>
                 <td>${packageData.packageWeight + ' Kg'}</td>
-                <td>${packageData.count + ' Kg'}</td>
+                <td>${packageData.count}</td>
                 <td>${packageData.price + ' $'}</td>
             `;
             table.appendChild(row);

@@ -7,6 +7,7 @@ const isValidNumber = (str) => /^[0-9]+$/.test(str);
 let isFarmerTableVisible = false;
 let isProductTableVisible = false;
 let isSearching = false;
+const logs = {};
 const farmers = {};
 const products = {};
 const addFarmerBtn = document.querySelector('#add-farmer-btn');
@@ -25,13 +26,29 @@ document.querySelector('#weight').addEventListener('input', calculateTotalPrice)
 document.querySelector('#price').addEventListener('input', calculateTotalPrice);
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadFarmersFromLocalStorage();
-    loadProductsFromLocalStorage();
+    loadDataToLocalStorage();
     setInvisibleFarmerTable();
     setInvisibleProductTable();
     hideSearchResults();
     addDropdowns();
+    console.log(logs);
 });
+function returnCurrentDate() {
+    const unformattedDate = new Date();
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    const seconds = String(unformattedDate.getSeconds()).padStart(2, '0'); // Saniye bilgisi
+
+    const startDate = `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`;
+
+    return startDate;
+}
+
 function addFarmer(name, location, email, phone){
     if(isValidText(name) && isValidText(location) && isValidEmail(email) && isValidPhoneNumber(phone)) {
         if(!isFarmerInfoExist(name,email,phone)) {
@@ -45,10 +62,16 @@ function addFarmer(name, location, email, phone){
                 location,
                 productIds
             };
-          clearAddFarmer();
-          setInvisibleFarmerTable();
-          addDropdowns();
-          alert(`Farmer "${name}" added successfully!`);
+            logs[returnCurrentDate()] = {
+                type: 'add_farmer',
+                date: returnCurrentDate(),
+                farmerId
+            };
+
+            clearAddFarmer();
+            setInvisibleFarmerTable();
+            addDropdowns();
+            alert(`Farmer "${name}" added successfully!`);
         }
     }else if (!isValidText(name)){
         alert('Lütfen geçerli bir isim giriniz!');
@@ -73,8 +96,29 @@ addFarmerBtn.addEventListener('click', () =>{
     const phone = document.querySelector('#phone').value;
 
     addFarmer(name,location,email,phone);
-    saveFarmersToLocalStorage();
+    saveDataToLocalStorage();
 });
+
+
+function saveDataToLocalStorage() {
+    saveLogsToLocalStorage();
+    saveFarmersToLocalStorage();
+    saveProductsToLocalStorage();
+}
+function loadDataToLocalStorage() {
+    loadLogsFromLocalStorage();
+    loadFarmersFromLocalStorage();
+    loadProductsFromLocalStorage();
+}
+function saveLogsToLocalStorage() {
+    localStorage.setItem('logs', JSON.stringify(logs));
+}
+function loadLogsFromLocalStorage() {
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+        Object.assign(logs, JSON.parse(storedLogs));
+    }
+}
 function saveFarmersToLocalStorage() {
     localStorage.setItem('farmers', JSON.stringify(farmers));
 }
@@ -225,6 +269,23 @@ function saveUpdateFarmer(row, farmer) {
     const phone = cells[3].querySelector('input').value;
     const farmerId = farmer.farmerId;
 
+    // Değişen dataları tutmak için bir dizi
+    const changes = [];
+
+    // Eski ve yeni değerleri karşılaştır
+    if (farmer.name !== name) {
+        changes.push({ field: 'name', oldValue: farmer.name, newValue: name });
+    }
+    if (farmer.location !== location) {
+        changes.push({ field: 'location', oldValue: farmer.location, newValue: location });
+    }
+    if (farmer.email !== email) {
+        changes.push({ field: 'email', oldValue: farmer.email, newValue: email });
+    }
+    if (farmer.phone !== phone) {
+        changes.push({ field: 'phone', oldValue: farmer.phone, newValue: phone });
+    }
+
     if(farmer.name == name && farmer.location == location && farmer.email == email && farmer.phone == phone) {
         alert('All infos are same...');
         cancelUpdateFarmer(row,farmer);
@@ -232,7 +293,7 @@ function saveUpdateFarmer(row, farmer) {
     }else {
         if(isValidText(name) && isValidText(location) && isValidEmail(email) && isValidPhoneNumber(phone)) {
             if(!isFarmerInfoExistForUpdate(name,email,phone,farmerId)) {
-                const productIds = [];
+                const productIds = farmer.productIds;
                 delete farmers[farmer.farmerId];
                 farmers[farmerId] = {
                     farmerId,
@@ -244,7 +305,13 @@ function saveUpdateFarmer(row, farmer) {
                 };
                 clearAddFarmer();
                 setInvisibleFarmerTable();
-                saveFarmersToLocalStorage();
+                logs[returnCurrentDate()] = {
+                    type:'edit_farmer',
+                    date: returnCurrentDate(),
+                    farmerId,
+                    changes
+                }
+                saveDataToLocalStorage();
                 alert(`Farmer "${name}" updated successfully!`);
             }
         }else if (!isValidText(name)){
@@ -289,7 +356,12 @@ function isFarmerInfoExistForUpdate(name, email, phone, id) {
 function deleteBtnFarmer(farmer) {
     if(farmers[farmer.farmerId]) {
         delete farmers[farmer.farmerId];
-        saveFarmersToLocalStorage();
+        logs[returnCurrentDate()] = {
+            type:'delete_farmer',
+            date: returnCurrentDate(),
+            farmer
+        }
+        saveDataToLocalStorage();
         addDropdowns();
         clearAddFarmer();
         const addFarmerBtn = document.querySelector('#add-farmer-btn');
@@ -467,6 +539,14 @@ function addProduct(farmerId,productName,weight,price) {
         products[productId].weight = totalW;
         products[productId].price = averagePrice;
         products[productId].totalPrice = totalPrice;
+        
+        logs[returnCurrentDate()] = {
+            type:'update_product',
+            date: returnCurrentDate(),
+            productId,
+            w: weight,
+            p: price
+        }
     }else{
         const totalPrice = weight * price;
         productId = `product_${Date.now()}`;
@@ -479,9 +559,16 @@ function addProduct(farmerId,productName,weight,price) {
             totalPrice
         };
         farmers[farmerId].productIds.push(productId);
+
+        logs[returnCurrentDate()] = {
+            type:'add_product',
+            date: returnCurrentDate(),
+            productId
+        }
     }
-    saveFarmersToLocalStorage();
-    saveProductsToLocalStorage();
+
+    
+    saveDataToLocalStorage();
     clearAddProduct();
     setInvisibleFarmerTable();
     setInvisibleProductTable();
@@ -640,6 +727,19 @@ function saveUpdateProduct(row, product) {
     const productId = product.productId;
     const farmerId = product.farmerId;
 
+    const changes = []; // Değişiklikleri tutmak için bir dizi
+
+    // Değişiklikleri kontrol et ve diziye ekle
+    if (product.productName !== productName) {
+        changes.push({ field: 'productName', oldValue: product.productName, newValue: productName });
+    }
+    if (product.weight !== weight) {
+        changes.push({ field: 'weight', oldValue: product.weight, newValue: weight });
+    }
+    if (product.price !== price) {
+        changes.push({ field: 'price', oldValue: product.price, newValue: price });
+    }
+
     if(product.productName == productName && product.weight == weight && product.price == price) {
         alert('All infos are same...');
         cancelUpdateProduct(row,product);
@@ -658,8 +758,13 @@ function saveUpdateProduct(row, product) {
             };
             clearAddProduct();
             setInvisibleProductTable();
-            saveFarmersToLocalStorage();
-            saveProductsToLocalStorage();
+            logs[returnCurrentDate()] = {
+                type:'edit_product',
+                date: returnCurrentDate(),
+                productId,
+                changes
+            }
+            saveDataToLocalStorage();
             alert(`Product "${productName}" updated successfully!`);
         }else if (!isValidText(name)){
             alert('Lütfen geçerli bir isim giriniz!');
@@ -678,6 +783,11 @@ function saveUpdateProduct(row, product) {
 }
 function deleteBtnProduct(product) {
     if(products[product.productId]) {
+        logs[returnCurrentDate()] = {
+            type:'delete_product',
+            date: returnCurrentDate(),
+            product
+        }
         delete products[product.productId];
         // Farmers içinde ilgili ürün ID'sini sil
         for (const farmerId in farmers) {
@@ -689,8 +799,7 @@ function deleteBtnProduct(product) {
                 break; // Daha fazla aramaya gerek yok, işlemi bitir
             }
         }
-        saveFarmersToLocalStorage();
-        saveProductsToLocalStorage();
+        saveDataToLocalStorage();
         addDropdowns();
         clearAddProduct();
         const addProductBtn = document.querySelector('#add-product-btn');

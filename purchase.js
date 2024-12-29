@@ -11,6 +11,7 @@ const products = {};
 const purchases = {};
 const inventory = {};
 const productNames = [];
+const logs = {};
 let isSearching = false;
 let isBuySuccessfully = false;
 let isPurchaseTableVisible = false;
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addProductNames();
     //localStorage.clear();
     //createData();
+    console.log(logs);
     console.log(farmers);
     console.log(products);
     console.log(purchases);
@@ -41,12 +43,38 @@ function loadDataFromLocalStorage() {
     loadFarmersFromLocalStorage();
     loadPurchasesFromLocalStorage();
     loadInventoryFromLocalStorage();
+    loadLogsFromLocalStorage();
 }
 function saveDataToLocalStorage() {
     saveProductsToLocalStorage();
     saveFarmersToLocalStorage();
     savePurchasesToLocalStorage();
     saveInventoryToLocalStorage();
+    saveLogsToLocalStorage();
+}
+function returnCurrentDate() {
+    const unformattedDate = new Date();
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    const seconds = String(unformattedDate.getSeconds()).padStart(2, '0'); // Saniye bilgisi
+
+    const startDate = `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`;
+
+    return startDate;
+}
+function saveLogsToLocalStorage() {
+    localStorage.setItem('logs', JSON.stringify(logs));
+}
+function loadLogsFromLocalStorage() {
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+        Object.assign(logs, JSON.parse(storedLogs));
+    }
 }
 function saveInventoryToLocalStorage() {
     localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -321,6 +349,14 @@ function showProductOnSearchTable(product) {
                 totalPrice,
                 farmerId
             }
+            logs[returnCurrentDate()] = {
+                type:'purchase_product',
+                date: returnCurrentDate(),
+                productName,
+                weight,
+                price,
+                farmerId
+            }
             let isExistProduct = false;
             for(const boughtProductId in inventory) {
                 const boughtProduct = inventory[boughtProductId];
@@ -339,6 +375,7 @@ function showProductOnSearchTable(product) {
                     weight
                 }
                 inventory[boughtProductId].date[date] = weight;
+                
             }else {
                 for(const boughtProductId in inventory) {
                     const boughtProduct = inventory[boughtProductId];

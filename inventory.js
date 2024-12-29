@@ -9,6 +9,7 @@ const products = {};
 const purchases = {};
 const inventory = {};
 const onSales = {};
+const logs = {};
 const productNames = [];
 let isProductTableVisible = false;
 let isSearching = false;
@@ -33,11 +34,7 @@ const packagingCategories = [
 document.addEventListener('DOMContentLoaded', () => {
     loadDataFromLocalStorage();
     addDropdownProducts();
-    console.log(farmers);
-    console.log(products);
-    console.log(purchases);
-    console.log(inventory);
-    console.log(onSales);
+    
 });
 
 function loadDataFromLocalStorage() {
@@ -46,12 +43,38 @@ function loadDataFromLocalStorage() {
     loadPurchasesFromLocalStorage();
     loadInventoryFromLocalStorage();
     loadOnSalesFromLocalStorage();
+    loadLogsFromLocalStorage();
 }
 function saveDataToLocalStorage() {
     saveProductsToLocalStorage();
     saveFarmersToLocalStorage();
     savePurchasesToLocalStorage();
     saveInventoryToLocalStorage();
+    saveLogsToLocalStorage();
+}
+function returnCurrentDate() {
+    const unformattedDate = new Date();
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    const seconds = String(unformattedDate.getSeconds()).padStart(2, '0'); // Saniye bilgisi
+
+    const startDate = `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`;
+
+    return startDate;
+}
+function saveLogsToLocalStorage() {
+    localStorage.setItem('logs', JSON.stringify(logs));
+}
+function loadLogsFromLocalStorage() {
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+        Object.assign(logs, JSON.parse(storedLogs));
+    }
 }
 function saveInventoryToLocalStorage() {
     localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -234,6 +257,12 @@ function setAlertWeight(row,boughtProductId) {
             alertCell.textContent = newAlert;
             alertBtn.textContent = 'Set / Change Alert'; // Buton adını geri değiştir
             product.alert = newAlert;
+            logs[returnCurrentDate()] = {
+                type:'set_alert',
+                date: returnCurrentDate(),
+                boughtProductId,
+                newAlert
+            }
             saveDataToLocalStorage();
         } else if(newAlert == currentAlert){
             alert('Alert value is the same with current value.');
@@ -756,16 +785,19 @@ function savePackages(selectedProductId, isCustom) {
     if (!product.packages) {
         product.packages = {}; // Eğer tanımlı değilse boş bir obje olarak başlat
     }
+    const array = [];
 
     for (const typeLabel in data) {
         if (data[typeLabel].count > 0) { // Sadece paketlenenleri al
             const count = data[typeLabel].count; // Paketlenen adet
             const total = data[typeLabel].total; // Toplam ağırlık
             const weight = data[typeLabel].weight;
+
+            array.push(data[typeLabel]);
             
             if (product.packages[typeLabel]) {
                 // Eğer typeLabel zaten varsa, mevcut count değerini artır
-                product.packages[typeLabel].count += count;
+                product.packages[typeLabel].count += Number(count);
             } else {
                 // Eğer typeLabel yoksa, yeni bir giriş oluştur
                 product.packages[typeLabel] = {
@@ -774,12 +806,26 @@ function savePackages(selectedProductId, isCustom) {
                     weight
                 };
             }
+            
 
-            used += total; // Kullanılan toplam ağırlığı hesapla
+            used += Number(total); // Kullanılan toplam ağırlığı hesapla
         }
     }
 
-    product.packagedWeight = used;
+    logs[returnCurrentDate()] = {
+        type:'packaging_product',
+        date: returnCurrentDate(),
+        boughtProductId: product.boughtProductId,
+        array
+    }
+
+
+    if (product.packagedWeight) {
+        product.packagedWeight += Number(used);
+    }else{
+        product.packagedWeight = Number(used);
+    }
+
     product.weight -= Number(used); // Stoktan kullanılan ağırlığı düş
     saveDataToLocalStorage(); // Veriyi LocalStorage'a kaydet
     setInvisibleProductTable();
@@ -914,8 +960,15 @@ searchEditPackageBtn.addEventListener('click', () => {
                 table.parentElement.removeChild(table); // Tabloyu sil
                 searchEditPackageBtn.textContent = 'Search';
                 product.weight += Number(product.packagedWeight);
+                logs[returnCurrentDate()] = {
+                    type:'delete_package',
+                    date: returnCurrentDate(),
+                    boughtProductId: product.boughtProductId,
+                    packages: product.packages
+                }
                 delete product.packages;
                 product.packagedWeight = Number(0);
+                
                 saveDataToLocalStorage();
             });
             

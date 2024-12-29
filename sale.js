@@ -6,28 +6,16 @@ const products = {};
 const purchases = {};
 const inventory = {};
 const onSales = {};
+const logs = {};
 
 
 document.addEventListener('DOMContentLoaded', () => {
     loadDataFromLocalStorage();
     populateProductSelector();
     renderProductCards();
-    
-    
-    console.log('FARMERS');
-    console.log(farmers);
-
-    console.log('PRODUCTS');
-    console.log(products);
-
-    console.log('PRUCHASES');
-    console.log(purchases);
-
-    console.log('İNVENTORY');
     console.log(inventory);
     
-    console.log('SALES');
-    console.log(onSales);
+
     });
 
 
@@ -37,6 +25,7 @@ function loadDataFromLocalStorage() {
     loadPurchasesFromLocalStorage();
     loadInventoryFromLocalStorage();
     loadOnSalesFromLocalStorage();
+    loadLogsFromLocalStorage();
 }
 function saveDataToLocalStorage() {
     saveProductsToLocalStorage();
@@ -44,6 +33,31 @@ function saveDataToLocalStorage() {
     savePurchasesToLocalStorage();
     saveInventoryToLocalStorage();
     saveOnSalesToLocalStorage();
+    saveLogsToLocalStorage();
+}
+function returnCurrentDate() {
+    const unformattedDate = new Date();
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
+    const seconds = String(unformattedDate.getSeconds()).padStart(2, '0'); // Saniye bilgisi
+
+    const startDate = `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`;
+
+    return startDate;
+}
+function saveLogsToLocalStorage() {
+    localStorage.setItem('logs', JSON.stringify(logs));
+}
+function loadLogsFromLocalStorage() {
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+        Object.assign(logs, JSON.parse(storedLogs));
+    }
 }
 function saveInventoryToLocalStorage() {
     localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -106,7 +120,7 @@ function populateProductSelector() {
 
     for (const productId in inventory) {
         const product = inventory[productId];
-        if (product.packagedWeight != null) {
+        if (product.packagedWeight != null && product.packagedWeight != 0) {
             const option = document.createElement('option');
             option.value = productId; // Product ID'yi value olarak kullanıyoruz
             option.textContent = product.productName; // Ürün ismini gösteriyoruz
@@ -277,6 +291,7 @@ saveSellBtn.addEventListener('click', () => {
     if(checkboxCounter > 0) {
         if (isCompleted) {
             let counter = 0;
+            const array = [];
             for(const item of data) {
                 let isUpdatedOnSale = false;
                 const count = item.count;
@@ -323,11 +338,18 @@ saveSellBtn.addEventListener('click', () => {
                         price
                     };
                 }else {
+
                 }
                 
                 counter += 1;
-    
+                array.push(item);
                 
+            }
+            logs[returnCurrentDate()] = {
+                type:'onSale_package',
+                date: returnCurrentDate(),
+                productName: product.productName,
+                package: array
             }
             saveDataToLocalStorage();
             document.getElementById('sell-products-container').innerHTML = "";
@@ -457,10 +479,23 @@ function renderProductCards() {
                     }
             
                     // Update package data
+                    const oldCount = package.count;
+                    const oldPrice = package.price;
+
                     boughtProduct.packages[package.type].count = Number(availablePackage) + Number(package.count) - Number(newCount);
                     package.count = newCount;
                     package.price = newPrice;
                     
+                    logs[returnCurrentDate()] = {
+                        type:'update_onSale',
+                        date: returnCurrentDate(),
+                        productName,
+                        package: package.type,
+                        oldCount,
+                        oldPrice,
+                        newCount,
+                        newPrice
+                    }
 
 
             
@@ -555,10 +590,17 @@ function renderProductCards() {
                         // Remove the product card from the DOM
                         productCard.remove();
             
-                        // Optional: Remove package from data
-
+                        
+                        
                         for (const boughtProductId in inventory) {
                             if (inventory[boughtProductId].productName == productName) {
+                                // Optional: Remove package from data
+                                logs[returnCurrentDate()] = {
+                                    type:'delete_onSale',
+                                    date: returnCurrentDate(),
+                                    boughtProductId: boughtProduct.boughtProductId,
+                                    deleted_package: onSales[productName].packages[package.type]
+                                }
                                 const boughtProduct = inventory[boughtProductId];
                                 boughtProduct.packages[package.type].count += package.count;
                                 break;
