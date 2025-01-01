@@ -4,8 +4,10 @@ let isProductTableVisible = false;
 const listProductsBtn = document.querySelector('#list-products-btn');
 const searchProductBtn = document.querySelector('#search-product-btn');
 const searchType = document.getElementById('search-type');
+const searchValueFarmer = document.getElementById('search-value-farmer');
 const listPurchasesBtn = document.querySelector('#list-purchases-btn');
 const showFilterTableBtn = document.getElementById('show-results-btn');
+const showFilterTableFarmerBtn = document.getElementById('show-results-farmer-btn');
 const farmers = {};
 const products = {};
 const purchases = {};
@@ -16,11 +18,13 @@ let isSearching = false;
 let isBuySuccessfully = false;
 let isPurchaseTableVisible = false;
 let isFiltering = false;
+let isFilteringFarmer = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     setInvisiblePurchaseTable();
     loadDataFromLocalStorage();
     addProductNames();
+    addDropdownFarmersSecond();
     //localStorage.clear();
     //createData();
     console.log(logs);
@@ -29,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(purchases);
     console.log(inventory);
 });
+searchValueFarmer.addEventListener('change', ()=> {
+    setInvisibleFilteringFarmerTable();
+    isFilteringFarmer = false;
+})
 // Farmer Name Dropdown'da değişiklik olduğunda çalışacak
 searchType.addEventListener('change', function() {
     const selectedType = this.value;
@@ -38,6 +46,7 @@ searchType.addEventListener('change', function() {
         addDropdownProducts();
     }
 });
+
 function loadDataFromLocalStorage() {
     loadProductsFromLocalStorage();
     loadFarmersFromLocalStorage();
@@ -222,6 +231,23 @@ function addDropdownProducts() {
 // Dropdown'u doldur
 function addDropdownFarmers() {
     const farmerDropdown = document.getElementById('search-value');
+    farmerDropdown.innerHTML = '';
+    // Farmers nesnesini döngü ile gez
+    for (const farmerId in farmers) {
+        const farmer = farmers[farmerId];
+
+        // Her çiftçi için bir <option> elementi oluştur
+        const option = document.createElement('option');
+        option.value = farmerId; // Değer olarak farmerId'yi kullan
+        option.textContent = farmer.name; // Gösterilecek metin olarak farmer.name kullan
+
+        // Oluşturulan <option>'ı dropdown'a ekle
+        farmerDropdown.appendChild(option);
+    }
+}
+// Dropdown'u doldur
+function addDropdownFarmersSecond() {
+    const farmerDropdown = document.getElementById('search-value-farmer');
     farmerDropdown.innerHTML = '';
     // Farmers nesnesini döngü ile gez
     for (const farmerId in farmers) {
@@ -656,4 +682,51 @@ function createData() {
 
     saveDataToLocalStorage();
 }
+
+
+// Tabloyu görünür yapma fonksiyonu
+function setVisibleFilteringFarmerTable() {
+    const table = document.getElementById('filtered-purchases-farmer-table');
+    table.style.display = 'table'; // Tabloyu görünür yapar
+    showFilterTableFarmerBtn.textContent = 'Close Results';
+}
+
+// Tabloyu görünmez yapma fonksiyonu
+function setInvisibleFilteringFarmerTable() {
+    const table = document.getElementById('filtered-purchases-farmer-table');
+    table.style.display = 'none'; // Tabloyu gizler
+    showFilterTableFarmerBtn.textContent = 'Show Results';
+}
+showFilterTableFarmerBtn.addEventListener('click', () => {
+    const farmerId = document.getElementById('search-value-farmer').value;
+    const filteredBody = document.getElementById('filtered-purchases-farmer-body');
+
+    if (isFilteringFarmer) {
+        setInvisibleFilteringFarmerTable();
+        isFilteringFarmer = false;
+    }else {
+        setVisibleFilteringFarmerTable();
+        isFilteringFarmer = true;
+        filteredBody.innerHTML = ''; // Önce tabloyu temizle
+
+        for (const purchaseId in purchases) {
+            const purchase = purchases[purchaseId];
+            const purchaseDate = new Date(purchase.date.replace('_', 'T')); // Tarihi doğru formata dönüştür
+    
+            if (purchase.farmerId == farmerId) {
+                // Satır ekleme
+                const row = `
+                    <tr>
+                        <td>${purchase.productName}</td>
+                        <td>${purchase.date}</td>
+                        <td>${purchase.weight}</td>
+                        <td>${purchase.price}</td>
+                        <td>${purchase.totalPrice}</td>
+                    </tr>
+                `;
+                filteredBody.insertAdjacentHTML('beforeend', row);
+            }
+        }
+    }
+}) 
 

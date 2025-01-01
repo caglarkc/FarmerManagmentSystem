@@ -544,8 +544,8 @@ function addProduct(farmerId,productName,weight,price) {
             type:'update_product',
             date: returnCurrentDate(),
             productId,
-            w: weight,
-            p: price
+            weight,
+            price
         }
     }else{
         const totalPrice = weight * price;
@@ -563,7 +563,9 @@ function addProduct(farmerId,productName,weight,price) {
         logs[returnCurrentDate()] = {
             type:'add_product',
             date: returnCurrentDate(),
-            productId
+            productId,
+            weight,
+            price
         }
     }
 

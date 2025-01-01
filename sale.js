@@ -349,7 +349,7 @@ saveSellBtn.addEventListener('click', () => {
                 type:'onSale_package',
                 date: returnCurrentDate(),
                 productName: product.productName,
-                package: array
+                packages: array
             }
             saveDataToLocalStorage();
             document.getElementById('sell-products-container').innerHTML = "";
@@ -598,8 +598,8 @@ function renderProductCards() {
                                 logs[returnCurrentDate()] = {
                                     type:'delete_onSale',
                                     date: returnCurrentDate(),
-                                    boughtProductId: boughtProduct.boughtProductId,
-                                    deleted_package: onSales[productName].packages[package.type]
+                                    productName,
+                                    packages: onSales[productName].packages[package.type]
                                 }
                                 const boughtProduct = inventory[boughtProductId];
                                 boughtProduct.packages[package.type].count += package.count;

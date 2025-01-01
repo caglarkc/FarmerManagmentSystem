@@ -261,7 +261,7 @@ function setAlertWeight(row,boughtProductId) {
                 type:'set_alert',
                 date: returnCurrentDate(),
                 boughtProductId,
-                newAlert
+                alert: newAlert
             }
             saveDataToLocalStorage();
         } else if(newAlert == currentAlert){
@@ -791,7 +791,7 @@ function savePackages(selectedProductId, isCustom) {
         if (data[typeLabel].count > 0) { // Sadece paketlenenleri al
             const count = data[typeLabel].count; // Paketlenen adet
             const total = data[typeLabel].total; // Toplam ağırlık
-            const weight = data[typeLabel].weight;
+            const weight = Number(data[typeLabel].weight);
 
             array.push(data[typeLabel]);
             
@@ -816,7 +816,7 @@ function savePackages(selectedProductId, isCustom) {
         type:'packaging_product',
         date: returnCurrentDate(),
         boughtProductId: product.boughtProductId,
-        array
+        packages: array
     }
 
 

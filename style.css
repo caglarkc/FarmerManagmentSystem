@@ -257,18 +257,18 @@ footer {
 
 
 /* List Farmers Bölümü */
-#list-farmers, #list-products, #list-purchases, #filter-purchases, #packaging-products, #special-packaging-products, #edit-packages{
+#list-farmers, #list-products, #list-orders, #list-purchases, #filter-purchases, #filter-purchases-farmer, #packaging-products, #special-packaging-products, #edit-packages{
   margin-top: 2rem;
   text-align: left;
 }
 
-#list-farmers h2, #list-products h2, #list-purchases h2, #filter-purchases h2, #packaging-products h2, #special-packaging-products h2, #edit-packages h2{
+#list-farmers h2, #list-products h2, #list-orders h2, #list-purchases h2, #filter-purchases h2, #filter-purchases-farmer h2, #packaging-products h2, #special-packaging-products h2, #edit-packages h2{
   margin-bottom: 1rem;
   color: #4CAF50;
   text-align: center;
 }
 
-#list-farmers-btn, #list-products-btn, #list-purchases-btn {
+#list-farmers-btn, #list-products-btn, #list-orders-btn, #list-purchases-btn {
   background-color: #4CAF50;
   color: white;
   margin-top: 1rem;
@@ -437,7 +437,10 @@ button.alert-btn:active {
   text-align: center;
 }
 
-#search-product-btn, #search-farmer-btn, #show-results-btn {
+#search-product-btn, 
+#search-farmer-btn, 
+#show-results-btn, 
+#show-results-farmer-btn {
   background-color: #4CAF50;
   color: white;
   display: block;
@@ -447,8 +450,11 @@ button.alert-btn:active {
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin: 1rem auto; /* Butonu yatay olarak ortalar */
+  margin: 1rem 0; /* Üst ve alt boşluk */
+  text-align: left; /* İçerik hizalama */
+  margin-left: 0; /* Sola dayar */
 }
+
 
 #search-edit-package {
   background-color: #4CAF50;
@@ -462,11 +468,11 @@ button.alert-btn:active {
   transition: background-color 0.3s ease;
 }
 
-#search-product-btn:hover, #search-farmer-btn:hover, #show-results-btn:hover, #search-edit-package:hover{
+#search-product-btn:hover, #search-farmer-btn:hover, #show-results-btn:hover, #show-results-farmer-btn:hover, #search-edit-package:hover{
   background-color: #45a049;
 }
 
-#search-type, #search-value, #special-search-value, #search-product-value, #edit-package-value {
+#search-type, #search-value, #special-search-value, #search-value-farmer,  #search-product-value, #edit-package-value {
   padding: 0.75rem;
   font-size: 1rem;
   border: 1px solid #ccc;
@@ -1353,3 +1359,126 @@ button.alert-btn:active {
   justify-content: center; /* Ortada hizalama */
   align-items: center; /* Dikeyde hizalama */
 }
+
+/* Form genel ayarları */
+#userFormContainer {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  font-family: Arial, sans-serif;
+}
+
+/* Form genel ayarları */
+#userFormContainer {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  font-family: Arial, sans-serif;
+}
+
+/* Form başlığı */
+#userFormContainer h3 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+/* Formdaki her bir giriş alanı */
+#userForm div {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiketler */
+#userForm label {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+/* Giriş alanları */
+#userForm input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Giriş alanlarının odaklanma efekti */
+#userForm input:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+/* Butonlar için düzenleme */
+#userForm button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+/* Submit ve Cancel butonları aynı satırda */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Submit butonu */
+#userForm button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+}
+
+#userForm button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+/* Cancel butonu */
+#userForm #cancelButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+#userForm #cancelButton:hover {
+  background-color: #c82333;
+}
+
+/* Responsive ayarları */
+@media (max-width: 500px) {
+  #userFormContainer {
+      width: 90%;
+  }
+}
+
+
+
+#orders-table td ul li {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+

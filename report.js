@@ -1,8 +1,13 @@
+const farmers = {};
+const products = {};
 const purchases = {};
 const inventory = {};
 const onSales = {};
-const deneme = {};
+const orders = {};
 const logs = {};
+const deneme = {};
+
+const taxValue = 3;
 
 const generateReportBtn = document.getElementById("generate-report");
 const inventoryTableBody = document.querySelector("#inventory-report-table tbody");
@@ -16,71 +21,14 @@ const btnType1 = document.querySelector('#generate-report-type1');
 const btnType2 = document.querySelector('#generate-report-type2');
 
 
-
-/*
-generateReportBtn.addEventListener('click', () => {
-    const year = document.getElementById('year-select').value;
-    const month = document.getElementById('month-select').value;
-    const day = document.getElementById('day-select').value;
-
-    let date = "";
-    if (year == 'all-years') {
-        date = '1900-01-01_00:00';
-    } else if (month == 'all-months') {
-        date = year + '-01-01_00:00';
-    } else if (day == 'all-days') {
-        date = year + '-' + month + '-01_00:00';
-    } else {
-        date = year + '-' + month + '-' + day + '_00:00';
-    }
-
-    console.log(date);
-    
-    const today = new Date();
-    const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-    const weekStart = new Date(today);
-    const day2 = today.getDay();
-    const diffToMonday = day2 === 0 ? -6 : 1 - day2; // Pazar için -6, diğer günler için 1 - gün
-    weekStart.setDate(today.getDate() + diffToMonday);
-
-    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-    const yearStart = new Date(today.getFullYear(), 0, 1);
-
-    const timePeriod = document.getElementById("time-period").value;
-
-    let startDate;
-
-    if (timePeriod === 'daily') {
-        startDate = today;
-    } else if (timePeriod === 'weekly') {
-        startDate = weekStart;
-    } else if (timePeriod === 'monthly') {
-        startDate = monthStart;
-    } else if (timePeriod === 'yearly') {
-        startDate = yearStart;
-    } else if (timePeriod === 'all-time') {
-        startDate = new Date(1000, 0, 1);
-    }
-
-    const result = Object.keys(deneme)
-        .filter(purchaseId => {
-            const purchaseDate = new Date(deneme[purchaseId].date.replace("_", "T"));
-            return purchaseDate >= startDate && purchaseDate <= today;
-        })
-        .map(purchaseId => deneme[purchaseId]);
-
-    console.log(result);
-
-
-    generateInventoryReport(timePeriod);
-    generatePurchasesReport(timePeriod);
-    generateOrdersReport(timePeriod);
-    generateTotalReport(timePeriod);
-    
-})
-*/
-
+const packagingCategories = [
+    { label: "Small", weight: 0.1 },   // 100g -> 0.1kg
+    { label: "Medium", weight: 0.25 }, // 250g -> 0.25kg
+    { label: "Large", weight: 0.5 },   // 500g -> 0.5kg
+    { label: "Extra Large", weight: 1 }, // 1kg
+    { label: "Family Pack", weight: 2 }, // 2kg
+    { label: "Bulk Pack", weight: 5 },  // 5kg
+];
 
 btnType1.addEventListener('click', () => {
     let year = document.getElementById("year-select").value;
@@ -108,16 +56,7 @@ btnType2.addEventListener('click', () => {
     const timePeriod = document.getElementById("time-period").value;
     
     const unformattedDate = new Date();
-
-    // Yıl, ay, gün, saat ve dakika bilgilerini al
-    const year = unformattedDate.getFullYear();
-    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
-    const day = String(unformattedDate.getDate()).padStart(2, '0');
-    const hours = String(unformattedDate.getHours()).padStart(2, '0');
-    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
     
-    
-
     if (timePeriod == 'daily') {
         unformattedDate.setDate(unformattedDate.getDate() - 1);
     } else if (timePeriod == 'weekly') {
@@ -129,6 +68,13 @@ btnType2.addEventListener('click', () => {
     }else {
         unformattedDate.setFullYear(unformattedDate.getFullYear() - 100);
     }
+
+    // Yıl, ay, gün, saat ve dakika bilgilerini al
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+    const hours = String(unformattedDate.getHours()).padStart(2, '0');
+    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
 
     // İstenilen formatta birleştir
     const startDate = `${year}-${month}-${day}_${hours}:${minutes}`;
@@ -143,16 +89,523 @@ btnType2.addEventListener('click', () => {
 function generateInventoryReport(timePeriod) {
     inventoryTableBody.innerHTML = "";
 
+    const formattedStartDate = new Date(timePeriod.replace('_','T'));
+
+    let data = {};
+
+    
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'purchase_product') {
+                const productName = log.productName;
+                const totalWeight = Number(log.weight);
+                const averagePrice = Number(log.price);
+                const totalCost = Number(totalWeight) * Number(averagePrice);
+                const unPackagedWeight = Number(log.weight);
+
+                if (!data[productName]) {
+                    const packages = {};
+                    const onSalePackages = {};
+                    data[productName] = {
+                        totalWeight: totalWeight,
+                        averagePrice: averagePrice,
+                        totalCost: totalCost,
+                        unPackagedWeight: unPackagedWeight,
+                        packagedWeight: 0,
+                        onSaleWeight: 0,
+                        selledWeight: 0,
+                        moneyFromSells: 0,
+                        packages: packages,
+                        onSalePackages: onSalePackages
+                    };
+                }else {
+                    data[productName].totalWeight += Number(totalWeight);
+                    data[productName].totalCost += Number(totalCost);
+                    data[productName].averagePrice = Number(data[productName].totalCost) / Number(data[productName].totalWeight);
+                    data[productName].unPackagedWeight += Number(unPackagedWeight);
+                }
+
+            }
+        }
+    }
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if(log.type == 'packaging_product') {
+                const productName = inventory[log.boughtProductId].productName;
+                const packages = log.packages;
+                for (const no in packages) {
+                    const package = packages[no];
+                    const weight = Number(package.weight);
+                    const packageType = packagingCategories.find(category => category.weight === weight)?.label || "Custom";
+                    const count = package.count;
+                    const totalWeight = Number(count) * Number(weight);
+                    
+                    data[productName].unPackagedWeight -= Number(totalWeight);
+                    data[productName].packagedWeight += Number(totalWeight);
+                    if (data[productName].packages[packageType]) {
+                        data[productName].packages[packageType].count += Number(count);
+                        
+                    }else {
+                        data[productName].packages[packageType] = {
+                            count,
+                            weight
+                        }
+                    }    
+
+                }
+
+            }
+        }
+    }
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'delete_package') {
+                const productName = inventory[log.boughtProductId].productName;
+                const packages = log.packages;
+                for (const no in packages) {
+                    const package = packages[no];
+                    const count = package.count;
+                    const weight = package.weight;
+                    const packageType = packagingCategories.find(category => category.weight === weight)?.label || "Custom";
+                    const totalWeight = Number(count) * Number(weight);
+                    data[productName].packagedWeight -= Number(totalWeight);
+                    data[productName].unPackagedWeight += Number(totalWeight);
+
+                    if (data[productName].packages[packageType]) {
+                        data[productName].packages[packageType].count -= Number(count);
+                    }
+                }
+            }
+        }
+    }
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'onSale_package') {
+                const productName = log.productName;
+                const packages = log.packages;
+                for (const no in packages) {
+                    const package = packages[no];
+                    const type = package.packageType;
+                    const count = package.count;
+                    const weight = packagingCategories.find(category => category.label === type)?.weight;
+                    const totalWeight = Number(count) * Number(weight);
+
+                    data[productName].packagedWeight -= Number(totalWeight);
+                    data[productName].onSaleWeight += Number(totalWeight);
+
+                    data[productName].packages[type].count -= Number(count);
+
+
+                    if (data[productName].onSalePackages[type]) {
+                        data[productName].onSalePackages[type].count += Number(count);
+                    }else{
+                        data[productName].onSalePackages[type] = {
+                            count,
+                            weight
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'update_onSale') {
+                const productName = log.productName;
+                const packageType = log.package;
+                const package = data[productName].onSalePackages[packageType];
+                const newCount = log.newCount;
+                const oldCount = log.oldCount;
+                if (oldCount != newCount) {
+                    if (oldCount < newCount) {
+                        const difCount = Number(newCount) - Number(oldCount);
+                        const totalWeight = difCount * package.weight;
+                        data[productName].packages[packageType].count -= difCount;
+                        data[productName].onSalePackages[packageType].count += difCount;
+
+                        data[productName].packagedWeight -= Number(totalWeight);
+                        data[productName].onSaleWeight += Number(totalWeight);
+                    }else {
+                        const difCount = Number(oldCount) - Number(newCount);
+                        const totalWeight = difCount * package.weight;
+
+                        data[productName].packages[packageType].count += difCount;
+                        data[productName].onSalePackages[packageType].count -= difCount;
+
+                        data[productName].packagedWeight += Number(totalWeight);
+                        data[productName].onSaleWeight -= Number(totalWeight);
+                    }
+                    
+                }
+                
+            }
+        }
+    }
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'delete_onSale') {
+                const productName = log.productName;
+                const package = log.packages;
+                const count = package.count;
+                const weight = package.packageWeight;
+                const type = package.type;
+                const totalWeight = Number(count) * Number(weight);
+                data[productName].packagedWeight += Number(totalWeight);
+                data[productName].onSaleWeight -= Number(totalWeight);
+
+                data[productName].packages[type].count += Number(count);
+
+                data[productName].onSalePackages[type].count -= Number(count);
+                
+            }
+        }
+    }
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'order') {
+                const order = orders[log.orderId];
+                
+                for (const no in order.boughts) {
+                    const product = order.boughts[no];
+                    const productName = product.productName;
+                    const count = product.count;
+                    const price = product.price;
+                    const packageWeight = product.packageWeight;
+                    const totalWeight = Number(count) * Number(packageWeight);
+                    const packageType = packagingCategories.find(category => category.weight === packageWeight)?.label;
+
+                    data[productName].onSalePackages[packageType].count -= Number(count);
+                    data[productName].onSaleWeight -= Number(totalWeight);
+                    data[productName].selledWeight += Number(totalWeight);
+                    data[productName].moneyFromSells += Number(price) * Number(count);
+                    data[productName].totalWeight -= Number(totalWeight);
+                }
+            
+                
+            }
+        }
+    }
+
+    // Data nesnesindeki her ürünü döngüye alıyoruz
+    for (const productName in data) {
+        const product = data[productName];
+
+        // Yeni bir satır oluşturuyoruz
+        const row = document.createElement("tr");
+
+        // Her sütunu oluşturup satıra ekliyoruz
+        const productNameCell = document.createElement("td");
+        productNameCell.textContent = productName; // Ürün adı
+        row.appendChild(productNameCell);
+
+        const totalWeightCell = document.createElement("td");
+        totalWeightCell.textContent = product.totalWeight + 'Kg'; // Toplam ağırlık
+        row.appendChild(totalWeightCell);
+
+        const averagePriceCell = document.createElement("td");
+        averagePriceCell.textContent = product.averagePrice + '$'; // Ortalama fiyat
+        row.appendChild(averagePriceCell);
+
+        const totalCostCell = document.createElement("td");
+        totalCostCell.textContent = product.totalCost + '$'; // Toplam maliyet
+        row.appendChild(totalCostCell);
+
+        const packagedWeightCell = document.createElement("td");
+        packagedWeightCell.textContent = product.packagedWeight + 'Kg'; // Paketlenmiş ağırlık
+        row.appendChild(packagedWeightCell);
+
+        const unPackagedWeightCell = document.createElement("td");
+        unPackagedWeightCell.textContent = product.unPackagedWeight + 'Kg'; // Paketlenmemiş ağırlık
+        row.appendChild(unPackagedWeightCell);
+
+        const onSaleWeightCell = document.createElement("td");
+        onSaleWeightCell.textContent = product.onSaleWeight + 'Kg'; // Satışta olan ağırlık
+        row.appendChild(onSaleWeightCell);
+
+        // Satırı tabloya ekliyoruz
+        inventoryTableBody.appendChild(row);
+    }
+
 
 }
 function generatePurchasesReport(timePeriod) {
     purchasesTableBody.innerHTML = "";
+
+    const formattedStartDate = new Date(timePeriod.replace('_','T'));
+
+    let data = {};
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'purchase_product') {
+                const productName = log.productName;
+                const weight = Number(log.weight);
+                const averagePrice = Number(log.price);
+                const totalCost = Number(weight) * Number(averagePrice);
+                if (data[productName]) {
+                    data[productName].weight += Number(weight);
+                    data[productName].totalCost += Number(totalCost);
+                    data[productName].averagePrice = Number(data[productName].totalCost) / Number(data[productName].weight);
+                } else{
+                    data[productName] = {
+                        productName,
+                        weight,
+                        totalCost,
+                        averagePrice
+                    }
+                }
+
+            }
+        }
+    }
+    // Data nesnesindeki her ürünü döngüye alıyoruz
+    for (const productName in data) {
+        // Yeni bir satır oluşturuyoruz
+        const row = document.createElement("tr");
+        const product = data[productName];
+
+        // Her sütunu oluşturup satıra ekliyoruz
+        const productNameCell = document.createElement("td");
+        productNameCell.textContent = productName; // Ürün adı
+        row.appendChild(productNameCell);
+
+        const totalWeightCell = document.createElement("td");
+        totalWeightCell.textContent = product.weight + 'Kg'; // Toplam ağırlık
+        row.appendChild(totalWeightCell);
+
+        const averagePriceCell = document.createElement("td");
+        averagePriceCell.textContent = product.averagePrice + '$'; // Ortalama fiyat
+        row.appendChild(averagePriceCell);
+
+        const totalCostCell = document.createElement("td");
+        totalCostCell.textContent = product.totalCost + '$'; // Toplam maliyet
+        row.appendChild(totalCostCell);
+
+
+        // Satırı tabloya ekliyoruz
+        purchasesTableBody.appendChild(row);
+    }
+
 }
 function generateOrdersReport(timePeriod) {
     ordersTableBody.innerHTML = "";
+
+    const formattedStartDate = new Date(timePeriod.replace('_','T'));
+
+    let data = {};
+
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_','T'));
+        if (formattedDate > formattedStartDate) {
+            if (log.type == 'order') {   
+                
+                for (const no in orders[log.orderId].boughts) {
+                    const package = orders[log.orderId].boughts[no];
+                    const productName = package.productName;
+                    const packageWeight = package.packageWeight;
+                    const count = package.count;
+                    const averagePrice = package.price;
+                    const totalWeight = Number(count) * Number(packageWeight);
+                    const totalPrice = Number(count) * Number(averagePrice);
+
+                    // `data[productName]` tanımlı mı kontrol et
+                    if (!data[productName]) {
+                        data[productName] = {
+                            totalWeight: 0,
+                            totalPrice: 0,
+                            packages: {}
+                        };
+                    }
+
+                    if (data[productName].packages[packageWeight]) {
+                        data[productName].packages[packageWeight].count += Number(count);
+                    }else {
+                        data[productName].packages[packageWeight] = {
+                            count,
+                            price: averagePrice,
+                            packageWeight
+                        }
+                    }
+
+                    if (data[productName]) {
+                        data[productName].totalWeight += Number(totalWeight);
+                        data[productName].totalPrice += Number(totalPrice);
+                    }
+
+                    
+                }
+                    
+
+
+
+            }
+        }
+    }
+    // Data nesnesindeki her ürünü döngüye alıyoruz
+    for (const productName in data) {
+        // Yeni bir satır oluşturuyoruz
+        const row = document.createElement("tr");
+        const product = data[productName];
+
+        // Ürün Adı
+        const productNameCell = document.createElement("td");
+        productNameCell.textContent = productName; // Ürün adı
+        row.appendChild(productNameCell);
+
+        // Satılan Paketler
+        const soldPackagesCell = document.createElement("td");
+        const packageDetails = Object.entries(product.packages) // `packages` objesini dolaş
+            .map(([packageWeight, pkg]) => `${pkg.count} adet (${packageWeight}kg)`)
+            .join(", "); // Her paketi "adet (kg)" formatında birleştir
+        soldPackagesCell.textContent = packageDetails; // Satılan paket detayları
+        row.appendChild(soldPackagesCell);
+
+        // Toplam Ağırlık
+        const totalWeightCell = document.createElement("td");
+        totalWeightCell.textContent = product.totalWeight + 'Kg'; // Toplam ağırlık
+        row.appendChild(totalWeightCell);
+
+        // Ortalama Fiyat
+        const averagePriceCell = document.createElement("td");
+        averagePriceCell.textContent = (product.totalPrice / product.totalWeight) + '$'; // Ortalama fiyat
+        row.appendChild(averagePriceCell);
+
+        // Toplam Fiyat
+        const totalPriceSell = document.createElement("td");
+        totalPriceSell.textContent = product.totalPrice + '$'; // Toplam maliyet
+        row.appendChild(totalPriceSell);
+
+        // Satırı tabloya ekliyoruz
+        ordersTableBody.appendChild(row);
+    }
+
 }
 function generateTotalReport(timePeriod) {
-    totalTableBody.innerHTML = "";
+    totalTableBody.innerHTML = ""; // Tabloyu temizle
+
+    const formattedStartDate = new Date(timePeriod.replace('_', 'T'));
+
+    let totalPurchasedWeight = 0;
+    let totalSoldWeight = 0;
+    let averagePurchaseCost = 0;
+    let averageSellingPrice = 0;
+    let totalPurchaseCost = 0;
+    let totalSalesRevenue = 0;
+    let totalProfit = 0;
+    let profitMargin = 0;
+    
+
+    // Satın alma verilerini işle
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_', 'T'));
+        if (formattedDate > formattedStartDate && log.type === "purchase_product") {
+            const weight = Number(log.weight);
+            const price = Number(log.price);
+            const cost = weight * price;
+
+            totalPurchasedWeight += weight;
+            totalPurchaseCost += cost;
+        }
+    }
+
+    // Satış verilerini işle
+    for (const date in logs) {
+        const log = logs[date];
+        const formattedDate = new Date(date.replace('_', 'T'));
+        if (formattedDate > formattedStartDate && log.type === "order") {
+            const order = orders[log.orderId];
+            
+            for (const no in order.boughts) {
+                const bought = order.boughts[no];
+                const weight = Number(bought.packageWeight) * Number(bought.count);
+                const totalPrice = Number(bought.price) * Number(bought.count);
+
+                totalSoldWeight += weight;
+                totalSalesRevenue += totalPrice;
+            }
+                
+        }
+    }
+
+    averagePurchaseCost = Number(totalPurchaseCost) / Number(totalPurchasedWeight);
+    averageSellingPrice = Number(totalSalesRevenue) / Number(totalSoldWeight);
+
+    totalProfit = Number(totalSalesRevenue) - Number(totalPurchaseCost);
+    
+    
+
+    // Tabloya Verileri Ekle
+    const row = document.createElement("tr");
+
+    const purchasedCell = document.createElement("td");
+    purchasedCell.textContent = totalPurchasedWeight + 'Kg'; // Toplam satın alınan ürün kg
+    row.appendChild(purchasedCell);
+
+    const soldCell = document.createElement("td");
+    soldCell.textContent = totalSoldWeight + 'Kg'; // Toplam satılan ürün kg
+    row.appendChild(soldCell);
+
+    const avgPurchaseCostCell = document.createElement("td");
+    avgPurchaseCostCell.textContent = averagePurchaseCost.toFixed(2) + '$'; // Ortalama satın alma maliyeti
+    row.appendChild(avgPurchaseCostCell);
+
+    const avgSellingPriceCell = document.createElement("td");
+    avgSellingPriceCell.textContent = averageSellingPrice.toFixed(2) + '$'; // Ortalama satış fiyatı
+    row.appendChild(avgSellingPriceCell);
+
+    const totalPurchaseCostCell = document.createElement("td");
+    totalPurchaseCostCell.textContent = totalPurchaseCost + '$'; // Toplam satın alma maliyeti
+    row.appendChild(totalPurchaseCostCell);
+
+    const totalSalesRevenueCell = document.createElement("td");
+    totalSalesRevenueCell.textContent = totalSalesRevenue + '$'; // Toplam satış geliri
+    row.appendChild(totalSalesRevenueCell);
+
+    const taxMargin = document.createElement("td");
+    taxMargin.textContent = '%' + taxValue; // Toplam satış geliri
+    row.appendChild(taxMargin);
+
+    const totalTaxPrice = document.createElement("td");
+    totalTaxPrice.textContent = ((totalProfit * taxValue) / 100 ) + '$'; // Toplam satış geliri
+    row.appendChild(totalTaxPrice);
+
+    totalProfit -= (totalProfit * taxValue) /100;
+    if (totalSalesRevenue < totalPurchaseCost) {
+        // Eğer zarar varsa, kar marjını negatif yüzde olarak hesapla
+        profitMargin = ((totalProfit / Number(totalPurchaseCost)) * 100).toFixed(2);
+    } else {
+        // Eğer kar varsa, kar marjını pozitif yüzde olarak hesapla
+        profitMargin = ((totalProfit / Number(totalPurchaseCost)) * 100).toFixed(2);
+    }
+    const profitMarginCell = document.createElement("td");
+    profitMarginCell.textContent = `${totalProfit}$ (${profitMargin}%)`; // Toplam kar ve kar marjı
+    row.appendChild(profitMarginCell);
+
+    totalTableBody.appendChild(row);
 }
 
 
@@ -181,71 +634,6 @@ function addDateDropdown() {
 
 
 
-
-
-
-function loadDataFromLocalStorage() {
-    loadOnSalesFromLocalStorage();
-    loadPurchasesFromLocalStorage();
-    loadInventoryFromLocalStorage();
-    loadLogsFromLocalStorage();
-}
-function saveDataToLocalStorage() {
-    saveOnSalesToLocalStorage();
-    savePurchasesToLocalStorage();
-    saveInventoryToLocalStorage();
-    saveLogsToLocalStorage();
-}
-function returnCurrentDate() {
-    const unformattedDate = new Date();
-
-    // Yıl, ay, gün, saat ve dakika bilgilerini al
-    const year = unformattedDate.getFullYear();
-    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // Aylar 0-11 arasında olduğu için +1 ekliyoruz
-    const day = String(unformattedDate.getDate()).padStart(2, '0');
-    const hours = String(unformattedDate.getHours()).padStart(2, '0');
-    const minutes = String(unformattedDate.getMinutes()).padStart(2, '0');
-
-    const startDate = `${year}-${month}-${day}_${hours}:${minutes}`;
-
-    return startDate;
-}
-function saveLogsToLocalStorage() {
-    localStorage.setItem('logs', JSON.stringify(logs));
-}
-function loadLogsFromLocalStorage() {
-    const storedLogs = localStorage.getItem('logs');
-    if (storedLogs) {
-        Object.assign(logs, JSON.parse(storedLogs));
-    }
-}
-function savePurchasesToLocalStorage() {
-    localStorage.setItem('purchases', JSON.stringify(purchases));
-}
-function loadPurchasesFromLocalStorage() {
-    const storedPurchases = localStorage.getItem('purchases');
-    if (storedPurchases) {
-        Object.assign(purchases, JSON.parse(storedPurchases));
-    }
-}
-function saveInventoryToLocalStorage() {
-    localStorage.setItem('inventory', JSON.stringify(inventory));
-}
-function loadInventoryFromLocalStorage() {
-    const storedInventory = localStorage.getItem('inventory');
-    if (storedInventory) {
-        Object.assign(inventory, JSON.parse(storedInventory));
-    }
-}
-function saveOnSalesToLocalStorage() {
-    localStorage.setItem('onSales', JSON.stringify(onSales));
-}
-function loadOnSalesFromLocalStorage() {
-    const storedOnSales = localStorage.getItem('onSales');
-    if (storedOnSales) {
-        Object.assign(onSales, JSON.parse(storedOnSales));
-    }
-}
 document.querySelectorAll('input[name="search-type"]').forEach((radio) => {
     radio.addEventListener('change', (event) => {
       if (event.target.value === 'type1') {
@@ -261,11 +649,9 @@ document.querySelectorAll('input[name="search-type"]').forEach((radio) => {
 document.addEventListener("DOMContentLoaded", () => {
     loadDataFromLocalStorage();
     addDateDropdown();
-
-    console.log(purchases);
-    console.log(inventory);
-    console.log(onSales);
     console.log(logs);
+
+
 
 
 
@@ -304,4 +690,64 @@ function addBackdatedPurchase(productName, farmerId, price, weight, backdateDays
         weight,
     };
 
+}
+
+
+function loadDataFromLocalStorage() {
+    loadProductsFromLocalStorage();
+    loadFarmersFromLocalStorage();
+    loadPurchasesFromLocalStorage();
+    loadInventoryFromLocalStorage();
+    loadOnSalesFromLocalStorage();
+    loadOrdersFromLocalStorage();
+    loadLogsFromLocalStorage();
+}
+
+function loadLogsFromLocalStorage() {
+    const storedLogs = localStorage.getItem('logs');
+    if (storedLogs) {
+        Object.assign(logs, JSON.parse(storedLogs));
+    }
+}
+
+function loadInventoryFromLocalStorage() {
+    const storedInventory = localStorage.getItem('inventory');
+    if (storedInventory) {
+        Object.assign(inventory, JSON.parse(storedInventory));
+    }
+}
+
+function loadOnSalesFromLocalStorage() {
+    const storedOnSales = localStorage.getItem('onSales');
+    if (storedOnSales) {
+        Object.assign(onSales, JSON.parse(storedOnSales));
+    }
+}
+
+function loadFarmersFromLocalStorage() {
+    const storedFarmers = localStorage.getItem('farmers');
+    if (storedFarmers) {
+        Object.assign(farmers, JSON.parse(storedFarmers));
+    }
+}
+
+function loadProductsFromLocalStorage() {
+    const storedProducts = localStorage.getItem('products');
+    if (storedProducts) {
+        Object.assign(products, JSON.parse(storedProducts));
+    }
+}
+
+function loadPurchasesFromLocalStorage() {
+    const storedPurchases = localStorage.getItem('purchases');
+    if (storedPurchases) {
+        Object.assign(purchases, JSON.parse(storedPurchases));
+    }
+}
+
+function loadOrdersFromLocalStorage() {
+    const storedOrders = localStorage.getItem('orders');
+    if (storedOrders) {
+        Object.assign(orders, JSON.parse(storedOrders));
+    }
 }

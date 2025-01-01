@@ -2,7 +2,6 @@ const inventory = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     loadInventoryFromLocalStorage();
-    console.log(inventory);
 });
 
 window.onload = () => {
